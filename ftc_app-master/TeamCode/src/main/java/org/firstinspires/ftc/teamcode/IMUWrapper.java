@@ -21,7 +21,6 @@ public class IMUWrapper {
     private String name;
     private HardwareMap hardwareMap;
     private BNO055IMU imu;
-    private double distanceFromZero;
 
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -30,7 +29,7 @@ public class IMUWrapper {
         this.hardwareMap = hardwareMap;
     }
 
-    public void initialize() {
+    public void calibrate() {
 
         imu = hardwareMap.get(BNO055IMU.class, name);
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -40,10 +39,6 @@ public class IMUWrapper {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
-
-    }
-
-    public void calibrate() {
 
         BNO055IMU.CalibrationData calibrationData = imu.readCalibrationData();
         String filename = "AdafruitIMUCalibration.json";
