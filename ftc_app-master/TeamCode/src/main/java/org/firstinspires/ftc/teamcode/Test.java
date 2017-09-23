@@ -20,22 +20,24 @@ public class Test extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
-        Gyroscope imu = hardwareMap.get(Gyroscope.class, "imu");
+        //DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+        //ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
+        //Gyroscope imu = hardwareMap.get(Gyroscope.class, "imu");
         super.waitForStart();
 
-        while(opModeIsActive()) {
-            /*telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
+        /*while(opModeIsActive()) {
+            telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Color: Red", colorSensor.red());
             telemetry.addData("Color: Green", colorSensor.green());
             telemetry.addData("Color: Blue", colorSensor.blue());
-            telemetry.update();*/
-            telemetry.addData("Gyro:", imu.getAngularVelocity(AngleUnit.DEGREES));
             telemetry.update();
+            telemetry.addData("Gyro:", imu.getAngularVelocity(AngleUnit.DEGREES));
+            telemetry.update();*/
 
-            
+
+
+
         }
 
     }
-}
+

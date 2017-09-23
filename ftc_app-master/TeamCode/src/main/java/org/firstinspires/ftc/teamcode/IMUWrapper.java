@@ -21,6 +21,8 @@ public class IMUWrapper {
     private String name;
     private HardwareMap hardwareMap;
     private BNO055IMU imu;
+    private double heading;
+    private double difference;
 
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -48,11 +50,11 @@ public class IMUWrapper {
     }
 
     public AngularVelocity getHeading() {
+
         return imu.getAngularVelocity();
     }
 
     public void reset() {
-
     }
 
 }
