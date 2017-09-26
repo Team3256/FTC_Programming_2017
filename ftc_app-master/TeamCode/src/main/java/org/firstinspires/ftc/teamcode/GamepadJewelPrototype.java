@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -14,6 +16,8 @@ public class GamepadJewelPrototype extends OpMode {
 
     Servo jewelArm;
     double position = 0;
+    ColorSensor colorSensor;
+    DistanceSensor sensorColorRange;
 
     @Override
 
@@ -21,6 +25,8 @@ public class GamepadJewelPrototype extends OpMode {
 
         jewelArm = hardwareMap.servo.get("jewel_arm");
         jewelArm.setPosition(jewelArm.getPosition());
+        sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
     }
 
     @Override
@@ -49,6 +55,16 @@ public class GamepadJewelPrototype extends OpMode {
         }
 
         jewelArm.setPosition(position);
+
+        if (gamepad1.right_bumper) {
+
+            if (colorSensor.red() >= (2 * colorSensor.blue())) {
+                telemetry.addData("Color", "RED");
+            } else if (colorSensor.blue() >= (2 * colorSensor.red())) {
+                telemetry.addData("Color", "BLUE");
+            }
+        }
+        telemetry.update();
     }
 
 }

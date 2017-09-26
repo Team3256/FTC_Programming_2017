@@ -24,8 +24,8 @@ public class Test extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        //ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
+        DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+        ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
         IMUWrapper imu = new IMUWrapper("imu", hardwareMap);
         imu.calibrate();
 
@@ -38,11 +38,11 @@ public class Test extends LinearOpMode {
 
 
 
-            /*telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
+            telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Color: Red", colorSensor.red());
             telemetry.addData("Color: Green", colorSensor.green());
             telemetry.addData("Color: Blue", colorSensor.blue());
-            telemetry.update(); */
+            telemetry.update();
             telemetry.addData("Gyro:", imu.getHeading());
             telemetry.update();
 
