@@ -17,7 +17,7 @@ public class DriveTrainTest extends LinearOpMode {
 
     DriveTrain driveTrain = DriveTrain.getInstance();
 
-    float left = 0, right = 0;
+    double left = 0, right = 0;
 
 
     @Override
@@ -28,6 +28,8 @@ public class DriveTrainTest extends LinearOpMode {
 
         super.waitForStart();
 
+        //Tank Drive
+        /*
         while (opModeIsActive()){
 
             right = -gamepad1.left_stick_y;
@@ -37,6 +39,16 @@ public class DriveTrainTest extends LinearOpMode {
             driveTrain.tankDrive(left, right);
             telemetry.update();
 
+        }
+        */
+
+        //Arcade Drive
+        while (opModeIsActive()){
+            left = -gamepad1.left_stick_y;
+            right = -gamepad1.right_stick_x;
+            telemetry.addData("Left", left);
+            telemetry.addData("Right", right);
+            driveTrain.arcadeDrive(left, right);
         }
     }
 }

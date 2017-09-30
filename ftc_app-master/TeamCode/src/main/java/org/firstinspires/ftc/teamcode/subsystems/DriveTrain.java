@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import static android.R.attr.left;
+import static android.R.attr.right;
 
 /**
  * Created by Team 6696 on 9/25/2017.
@@ -70,6 +72,17 @@ public class DriveTrain {
         leftFront.setMode(mode);
         rightFront.setMode(mode);
         //rightBack.setMode(mode);
+    }
+
+    public void arcadeDrive(double throttle, double turn){
+        double left = Math.pow((throttle + turn), 3);
+        double right = Math.pow((throttle - turn), 3);
+
+        right = Range.clip(right, -1, 1);
+        left = Range.clip(left, -1, 1);
+
+        runLeft(left);
+        runRight(right);
     }
 
     public static DriveTrain getInstance() {
