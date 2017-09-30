@@ -5,7 +5,11 @@ import com.vuforia.HINT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
@@ -25,7 +29,29 @@ public class VuforiaOp extends LinearOpMode {
         Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 3);
 
         VuforiaTrackables pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        pictographs.get(0).setName("Relic");
+        pictographs.get(0).setName("Left Relic");
+        pictographs.get(1).setName("Center Relic");
+        pictographs.get(2).setName("Right Relic");
+
+        super.waitForStart();
+
+        pictographs.activate();
+        while (opModeIsActive()){
+            for (VuforiaTrackable pict : pictographs){
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)pict.getListener()).getPose();
+
+                if(pose != null){
+                    VectorF translation = pose.getTranslation();
+
+                    telemetry.addData(pict.getName() + "-Translation", translation);
+
+                    double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                    telemetry.addData(pict.getName() + "-Degrees", degreesToTurn);
+                }
+            }
+
+            telemetry.update();
+        }
 
     }
 }

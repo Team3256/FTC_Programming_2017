@@ -34,10 +34,6 @@ public class Test extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-
-
-
-
             telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Color: Red", colorSensor.red());
             telemetry.addData("Color: Green", colorSensor.green());
