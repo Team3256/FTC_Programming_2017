@@ -27,8 +27,8 @@ public class IMUWrapper {
     private String name;
     private HardwareMap hardwareMap;
     private BNO055IMU imu;
-    private double offset = 0;
-    private double angle = 0;
+    public double offset = 0;
+    public double angle = 0;
 
 
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -54,6 +54,8 @@ public class IMUWrapper {
         File file = AppUtil.getInstance().getSettingsFile(filename);
         ReadWriteFile.writeFile(file, calibrationData.serialize());
 
+        offset = 0;
+
     }
 
     public double getHeading() {
@@ -62,8 +64,10 @@ public class IMUWrapper {
     }
 
     public void reset() {
-        offset = angle;
+        angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offset;
+        offset = angle + offset;
 
     }
+
 
 }
