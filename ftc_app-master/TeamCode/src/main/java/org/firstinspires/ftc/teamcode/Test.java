@@ -35,10 +35,6 @@ public class Test extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
-    OpenGLMatrix lastLocation = null;
-
-    VuforiaLocalizer vuforia;
-
     private boolean justPressed = true;
 
     @Override
@@ -57,11 +53,13 @@ public class Test extends LinearOpMode {
 
         //DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
         //ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
-        IMUWrapper imu = new IMUWrapper("imu", hardwareMap);
+        //IMUWrapper imu = new IMUWrapper("imu", hardwareMap);
+        VuforiaWrapper vuforiaWrapper = new VuforiaWrapper(hardwareMap);
 
         //driveTrain.init(hardwareMap);
 
-        imu.calibrate();
+        //imu.calibrate();
+        vuforiaWrapper.initialize();
 
         super.waitForStart();
 
@@ -98,7 +96,7 @@ public class Test extends LinearOpMode {
             }
             */
 
-            if (justPressed) {
+            /*if (justPressed) {
 
                 justPressed = false;
             } else if (gamepad1.y){
@@ -114,6 +112,12 @@ public class Test extends LinearOpMode {
             telemetry.addData("GetHeading", imu.getHeading());
             telemetry.addData("Angle", imu.angle);
             telemetry.addData("Offset", imu.offset);
+            telemetry.update(); */
+
+            if (gamepad1.right_bumper){
+                telemetry.addData(vuforiaWrapper.getPictograph(), "");
+            }
+
             telemetry.update();
 
 
