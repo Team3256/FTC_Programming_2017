@@ -114,7 +114,7 @@ public class Test extends LinearOpMode {
             telemetry.addData("Offset", imu.offset);
             telemetry.update(); */
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.x){
                 telemetry.addData(vuforiaWrapper.getPictograph(), "");
             }
 

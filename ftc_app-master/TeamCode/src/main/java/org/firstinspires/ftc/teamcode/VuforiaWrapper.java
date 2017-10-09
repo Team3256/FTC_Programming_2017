@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class VuforiaWrapper {
 
-    public static final String TAG = "Vuforia VuMark Detection";
+    public static final String TAG = "Vuforia VuMark Sample";
 
     VuforiaLocalizer vuforia;
 
@@ -42,10 +42,11 @@ public class VuforiaWrapper {
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         relicTemplate = relicTrackables.get(0);
 
-        eVuMark = RelicRecoveryVuMark.from(relicTemplate);
+        relicTrackables.activate();
     }
 
     public String getPictograph (){
+        eVuMark = RelicRecoveryVuMark.from(relicTemplate);
 
         String vuMark;
         if (eVuMark == RelicRecoveryVuMark.LEFT){
