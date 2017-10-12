@@ -29,8 +29,8 @@ public class DriveTrainTest extends LinearOpMode {
         super.waitForStart();
 
         //Tank Drive
-        /*
-        while (opModeIsActive()){
+
+        /*while (opModeIsActive()){
 
             right = -gamepad1.left_stick_y;
             left = -gamepad1.right_stick_y;
@@ -40,7 +40,9 @@ public class DriveTrainTest extends LinearOpMode {
             telemetry.update();
 
         }
+
         */
+
 
         //Arcade Drive
         while (opModeIsActive()){

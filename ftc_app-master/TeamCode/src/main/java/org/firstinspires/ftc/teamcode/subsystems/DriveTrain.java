@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.base.PIDController;
 
 import static android.R.attr.left;
 import static android.R.attr.right;
@@ -14,7 +15,7 @@ import static android.R.attr.right;
 
 public class DriveTrain {
 
-    DcMotor leftFront, rightFront;
+    DcMotor leftFront, rightFront, leftBack, rightBack;
 
     private static DriveTrain driveTrain = new DriveTrain();
 
@@ -26,25 +27,27 @@ public class DriveTrain {
 
         //Initializing motors
         leftFront = hardwareMap.dcMotor.get("leftFront");
-        //leftBack = hardwareMap.dcMotor.get("leftBack");
+        leftBack = hardwareMap.dcMotor.get("leftBack");
         rightFront = hardwareMap.dcMotor.get("rightFront");
-        //rightBack = hardwareMap.dcMotor.get("rightBack");
+        rightBack = hardwareMap.dcMotor.get("rightBack");
 
         //set motor directions
 
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        //leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        //rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //set motors to brake when inactive
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setPower(0);
+
+
 
     }
 
@@ -55,11 +58,11 @@ public class DriveTrain {
 
     public void runLeft(double speed){
         leftFront.setPower(speed);
-        //leftBack.setPower(speed);
+        leftBack.setPower(speed);
     }
     public void runRight(double speed){
         rightFront.setPower(speed);
-        //rightBack.setPower(speed);
+        rightBack.setPower(speed);
     }
 
     public void tankDrive(double left, double right){
@@ -68,10 +71,19 @@ public class DriveTrain {
     }
 
     public void setMode (DcMotor.RunMode mode){
-        //leftBack.setMode(mode);
+        leftBack.setMode(mode);
         leftFront.setMode(mode);
         rightFront.setMode(mode);
-        //rightBack.setMode(mode);
+        rightBack.setMode(mode);
+    }
+
+    public void flipDirection (){
+
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
     }
 
     public void arcadeDrive(double throttle, double turn){
@@ -88,6 +100,27 @@ public class DriveTrain {
     public static DriveTrain getInstance() {
         return driveTrain;
     }
+
+    public void resetEncoders(){
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
 
 
 }
