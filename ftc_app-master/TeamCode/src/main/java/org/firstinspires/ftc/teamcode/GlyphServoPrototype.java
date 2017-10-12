@@ -7,10 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.sun.tools.javac.util.Position;
 
 import static android.R.attr.left;
 import static android.R.attr.positiveButtonText;
 import static android.R.attr.right;
+import static com.sun.tools.doclint.HtmlTag.P;
 import static com.sun.tools.javac.main.Option.D;
 
 /**
@@ -43,37 +45,25 @@ public class GlyphServoPrototype extends OpMode {
 
     }
 
-    class thread implements Runnable {
-        @Override
-        public void run() {
-
-            glyphServo1.setPosition(position);
-            glyphServo2.setPosition(position);
-
-        }
-    }
-
     @Override
     public void loop() {
 
         if (gamepad1.left_bumper) {
+
             position += .001;
+
         }
         if (gamepad1.right_bumper) {
+
             position -= .001;
+
         }
 
-        position = Range.clip(position, -1, 1);
+        if (0 <= position && position <= 1){
 
-        if (gamepad1.y) {
-            //linearMotion.setPower(1);
-        } else if (gamepad1.a) {
-            //linearMotion.setPower(-1);
-        } else {
-            //linearMotion.setPower(0);
+            glyphServo1.setPosition(position);
+            glyphServo2.setPosition(-1*position);
+            telemetry.addData("Position", position);
         }
-
-        glyphServo1.setPosition(position);
-        glyphServo2.setPosition(position);
     }
 }
