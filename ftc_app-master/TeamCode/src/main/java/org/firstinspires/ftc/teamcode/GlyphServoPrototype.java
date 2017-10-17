@@ -55,12 +55,12 @@ public class GlyphServoPrototype extends OpMode {
 
         if (gamepad1.left_bumper) {
 
-            position += .01;
+            position += .007;
 
         }
         if (gamepad1.right_bumper) {
 
-            position -= .01;
+            position -= .007;
 
         }
 
