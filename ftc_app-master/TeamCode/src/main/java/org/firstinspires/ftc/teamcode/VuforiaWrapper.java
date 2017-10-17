@@ -18,8 +18,6 @@ public class VuforiaWrapper {
 
     VuforiaLocalizer vuforia;
 
-    RelicRecoveryVuMark eVuMark;
-
     private HardwareMap hardwareMap;
 
     private VuforiaTrackable relicTemplate;
@@ -46,25 +44,8 @@ public class VuforiaWrapper {
     }
 
     public String getPictograph (){
-        eVuMark = RelicRecoveryVuMark.from(relicTemplate);
 
-        String vuMark;
-        if (eVuMark == RelicRecoveryVuMark.LEFT){
-            vuMark = "Left";
-        }
-
-        else if (eVuMark == RelicRecoveryVuMark.CENTER){
-            vuMark = "Center";
-        }
-
-        else if (eVuMark == RelicRecoveryVuMark.RIGHT){
-            vuMark = "Right";
-        }
-
-        else {
-            vuMark = "Not Visible";
-        }
-        return vuMark;
+        return RelicRecoveryVuMark.from(relicTemplate).name();
     }
 
 }

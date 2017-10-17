@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.sun.tools.javac.util.Position;
 
 import static android.R.attr.left;
+import static android.R.attr.paddingStart;
 import static android.R.attr.positiveButtonText;
 import static android.R.attr.right;
 import static com.sun.tools.doclint.HtmlTag.P;
@@ -43,6 +44,10 @@ public class GlyphServoPrototype extends OpMode {
 
         //linearMotion.setPower(0);
 
+        telemetry.addData(Double.toString(glyphServo1.getPosition()), Double.toString(glyphServo1.getPosition() + 0.5));
+
+        telemetry.addData(Double.toString(glyphServo2.getPosition() - 0.5), Double.toString(glyphServo2.getPosition()));
+
     }
 
     @Override
@@ -50,20 +55,21 @@ public class GlyphServoPrototype extends OpMode {
 
         if (gamepad1.left_bumper) {
 
-            position += .001;
+            position += .01;
 
         }
         if (gamepad1.right_bumper) {
 
-            position -= .001;
+            position -= .01;
 
         }
 
-        if (0 <= position && position <= 1){
+        position = Range.clip(position, 0, 1);
 
-            glyphServo1.setPosition(position);
-            glyphServo2.setPosition(-1*position);
-            telemetry.addData("Position", position);
-        }
+        glyphServo1.setPosition(position);
+        glyphServo2.setPosition(1 - position);
+        telemetry.addData("Position", position);
+        telemetry.update();
+
     }
 }

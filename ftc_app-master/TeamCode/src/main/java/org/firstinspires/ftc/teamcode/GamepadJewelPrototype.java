@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by Team 3256 on 9/22/2017.
@@ -42,17 +43,7 @@ public class GamepadJewelPrototype extends OpMode {
 
         }
 
-        if (position > 1) {
-
-            position = 1;
-
-        }
-
-        else if (position < 0) {
-
-            position = 0;
-
-        }
+        position = Range.clip(position, 0, 1);
 
         jewelArm.setPosition(position);
 

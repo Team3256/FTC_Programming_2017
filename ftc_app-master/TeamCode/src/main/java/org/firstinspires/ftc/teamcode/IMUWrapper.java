@@ -65,7 +65,7 @@ public class IMUWrapper {
 
     public void reset() {
         angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offset;
-        offset = angle + offset;
+        offset += angle;
 
     }
 
