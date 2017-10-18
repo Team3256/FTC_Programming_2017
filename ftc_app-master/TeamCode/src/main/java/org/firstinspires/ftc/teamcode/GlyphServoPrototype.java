@@ -26,7 +26,8 @@ public class GlyphServoPrototype extends OpMode {
 
     Servo glyphServo1;
     Servo glyphServo2;
-    //DcMotor linearMotion;
+    DcMotor linearMotion;
+    double power;
 
     double position = 0;
 
@@ -34,15 +35,15 @@ public class GlyphServoPrototype extends OpMode {
     public void init() {
         glyphServo1 = hardwareMap.servo.get("glyphServo1");
         glyphServo2 = hardwareMap.servo.get("glyphServo2");
-        //linearMotion = hardwareMap.dcMotor.get("glyphLift");
+        linearMotion = hardwareMap.dcMotor.get("glyphLift");
 
         glyphServo1.setPosition(glyphServo1.getPosition());
         glyphServo2.setPosition(glyphServo2.getPosition());
 
-        //linearMotion.setDirection(DcMotorSimple.Direction.FORWARD);
-        //linearMotion.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linearMotion.setDirection(DcMotorSimple.Direction.FORWARD);
+        linearMotion.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //linearMotion.setPower(0);
+        linearMotion.setPower(power);
 
         telemetry.addData(Double.toString(glyphServo1.getPosition()), Double.toString(glyphServo1.getPosition() + 0.5));
 
@@ -64,10 +65,20 @@ public class GlyphServoPrototype extends OpMode {
 
         }
 
+        if (gamepad1.y) {
+            power = .007;
+        }
+
+        else {
+            power = 0;
+        }
+
         position = Range.clip(position, 0, 1);
+        power = Range.clip(power, -1, 1);
 
         glyphServo1.setPosition(position);
         glyphServo2.setPosition(1 - position);
+        linearMotion.setPower(power);
         telemetry.addData("Position", position);
         telemetry.update();
 
