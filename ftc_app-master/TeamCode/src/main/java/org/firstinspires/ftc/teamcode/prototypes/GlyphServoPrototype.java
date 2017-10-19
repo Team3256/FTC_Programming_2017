@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.prototypes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -44,11 +44,6 @@ public class GlyphServoPrototype extends OpMode {
         linearMotion.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         linearMotion.setPower(power);
-
-        telemetry.addData(Double.toString(glyphServo1.getPosition()), Double.toString(glyphServo1.getPosition() + 0.5));
-
-        telemetry.addData(Double.toString(glyphServo2.getPosition() - 0.5), Double.toString(glyphServo2.getPosition()));
-
     }
 
     @Override
