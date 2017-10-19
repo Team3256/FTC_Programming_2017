@@ -66,10 +66,15 @@ public class GlyphServoPrototype extends OpMode {
         }
 
         if (gamepad1.y) {
-            power = .007;
+            power = -.75;
         }
 
-        else {
+
+        else if (gamepad1.a){
+            power = .5;
+        }
+
+        else{
             power = 0;
         }
 
