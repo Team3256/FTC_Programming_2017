@@ -9,8 +9,13 @@ import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
+import static android.R.attr.direction;
+import static android.R.attr.hardwareAccelerated;
 import static android.R.attr.left;
+import static android.R.attr.name;
 import static android.R.attr.right;
+import static com.qualcomm.hardware.bosch.BNO055IMU.SensorMode.IMU;
+import static com.sun.tools.doclint.HtmlTag.I;
 import static com.sun.tools.javac.jvm.ByteCodes.ret;
 
 /**
@@ -23,12 +28,19 @@ public class DriveTrain {
 
     private static DriveTrain driveTrain = new DriveTrain();
 
+    public PIDController pidController;
+
+    private static HardwareMap hardwareMap;
+
+    public static IMUWrapper gyro = new IMUWrapper("imu", hardwareMap);
+
     private DriveTrain(){
 
     }
 
     public void init(HardwareMap hardwareMap){
 
+        this.hardwareMap = hardwareMap;
         //Initializing motors
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftBack = hardwareMap.dcMotor.get("leftBack");
@@ -48,6 +60,7 @@ public class DriveTrain {
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         setPower(0);
     }
@@ -109,26 +122,6 @@ public class DriveTrain {
         return driveTrain;
     }
 
-    public void resetEncoders(){
-
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-    }
-
     public double inchesToDegrees(double inches){
         return inches*360/Constants.WHEEL_DIAMETER*Math.PI;
     }
@@ -149,6 +142,45 @@ public class DriveTrain {
         return degrees*Constants.WHEEL_DIAMETER*Math.PI/360;
     }
 
+    public double getRightEncoder(){
+        return (Math.abs(rightFront.getCurrentPosition())+Math.abs(rightBack.getCurrentPosition()))/2;
+    }
 
+    public double getLeftEncoder(){
+        return (Math.abs(leftFront.getCurrentPosition())+Math.abs(leftBack.getCurrentPosition()))/2;
+    }
+
+    public double getAverageEncoderValue(){
+        return (getRightEncoder()+getLeftEncoder())/2;
+    }
+
+    public void resetEncoders(){
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+    public void turn(double degrees, double power, boolean right){
+
+        int direction = right ? 1 : -1;
+        pidController = new PIDController(0, 0, 0);
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        gyro.reset();
+    }
 
 }
