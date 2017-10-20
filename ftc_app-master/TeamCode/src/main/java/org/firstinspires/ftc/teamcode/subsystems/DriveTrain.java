@@ -5,11 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
 import static android.R.attr.left;
 import static android.R.attr.right;
+import static com.sun.tools.javac.jvm.ByteCodes.ret;
 
 /**
  * Created by Team 6696 on 9/25/2017.
@@ -48,9 +50,6 @@ public class DriveTrain {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setPower(0);
-
-
-
     }
 
     public void setPower(double power){
@@ -130,11 +129,24 @@ public class DriveTrain {
 
     }
 
-    public double ticksToInches(double ticks) {
-        return ticks * Constants.WHEEL_DIAMETER * Math.PI / Constants.TICKS_PER_ROTATION;
+    public double inchesToDegrees(double inches){
+        return inches*360/Constants.WHEEL_DIAMETER*Math.PI;
     }
+
+    public double degreesToTicks(double degrees){
+        return degrees*Constants.TICKS_PER_ROTATION/360;
+    }
+
+    public double inchesToTicks(double inches){
+        return degreesToTicks(inchesToDegrees(inches));
+    }
+
     public double ticksToDegrees(double ticks){
-        return ticksToInches(ticks)*360/(Constants.ROBOT_TRACK*Math.PI);
+        return ticks*360/Constants.TICKS_PER_ROTATION;
+    }
+
+    public double degreesToInches(double degrees){
+        return degrees*Constants.WHEEL_DIAMETER*Math.PI/360;
     }
 
 
