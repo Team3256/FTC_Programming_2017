@@ -79,13 +79,20 @@ public class DriveTrain {
         rightBack.setMode(mode);
     }
 
+    //Flip Motor Direction
     public void flipDirection (){
-
         leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+    }
 
+    //Unflip Motor Direction
+    public void unFlipDirection (){
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void arcadeDrive(double throttle, double turn){
@@ -125,6 +132,9 @@ public class DriveTrain {
 
     public double ticksToInches(double ticks) {
         return ticks * Constants.WHEEL_DIAMETER * Math.PI / Constants.TICKS_PER_ROTATION;
+    }
+    public double ticksToDegrees(double ticks){
+        return ticksToInches(ticks)*360/(Constants.ROBOT_TRACK*Math.PI);
     }
 
 
