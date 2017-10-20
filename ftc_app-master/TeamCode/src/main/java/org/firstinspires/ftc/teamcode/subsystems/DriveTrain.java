@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
 import static android.R.attr.left;
@@ -119,6 +121,10 @@ public class DriveTrain {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+    }
+
+    public double ticksToInches(double ticks) {
+        return ticks * Constants.WHEEL_DIAMETER * Math.PI / Constants.TICKS_PER_ROTATION;
     }
 
 
