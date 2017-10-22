@@ -32,6 +32,7 @@ public class GlyphServoPrototype extends OpMode {
     Servo glyphIntake1;
     DcMotor linearMotion;
     DcMotor intakeMotor1;
+    DcMotor intakeMotor2;
     double power;
     double intakePower = 0;
     //boolean intaked = false;
@@ -44,19 +45,23 @@ public class GlyphServoPrototype extends OpMode {
         glyphIntake1 = hardwareMap.servo.get("glyphIntake1");
         linearMotion = hardwareMap.dcMotor.get("glyphLift");
         intakeMotor1 = hardwareMap.dcMotor.get("intakeMotor1");
+        intakeMotor2 = hardwareMap.dcMotor.get("intakeMotor2");
 
         glyphServo1.setPosition(glyphServo1.getPosition());
         glyphServo2.setPosition(glyphServo2.getPosition());
         glyphIntake1.setPosition(glyphIntake1.getPosition());
-        glyphIntake1.setDirection(Servo.Direction.FORWARD);
+        glyphIntake1.setDirection(Servo.Direction.REVERSE);
 
         linearMotion.setDirection(DcMotorSimple.Direction.FORWARD);
         linearMotion.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         linearMotion.setPower(power);
         intakeMotor1.setPower(intakePower);
+        intakeMotor2.setPower(intakePower);
     }
 
     @Override
@@ -87,14 +92,17 @@ public class GlyphServoPrototype extends OpMode {
         }
 
         if (gamepad1.b) {
-            glyphIntake1.setPosition(0.116);
-            intakePower = .75;
+            glyphIntake1.setPosition(0.02128);
+            //glyphIntake1.setPosition(1);
+            intakePower = 1;
         } else {
-            glyphIntake1.setPosition(0.097);
+            glyphIntake1.setPosition(0.05);
+            //glyphIntake1.setPosition(0);
             intakePower = 0;
         }
 
-        intakeMotor1.setPower(intakePower);
+        intakeMotor1.setPower(-intakePower);
+        intakeMotor2.setPower(intakePower);
 
         position = Range.clip(position, 0, 1);
         power = Range.clip(power, -1, 1);
