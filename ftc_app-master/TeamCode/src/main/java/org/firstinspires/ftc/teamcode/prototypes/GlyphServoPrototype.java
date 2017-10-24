@@ -83,9 +83,9 @@ public class GlyphServoPrototype extends OpMode {
         }
 
 
-        else if (gamepad1.a){
-            power = .5;
-        }
+        //else if (gamepad1.a){
+           // power = .5;
+        //}
 
         else{
             power = 0;
@@ -94,18 +94,30 @@ public class GlyphServoPrototype extends OpMode {
         if (gamepad1.b) {
             glyphIntake1.setPosition(0.02128);
             //glyphIntake1.setPosition(1);
-            intakePower = 1;
+            //intakePower = 1;
         } else {
             glyphIntake1.setPosition(0.05);
             //glyphIntake1.setPosition(0);
+            //intakePower = 0;
+        }
+
+        if (gamepad1.y){
+            intakePower = 1;
+        }
+
+        else if (gamepad1.a){
+            intakePower = -1;
+        }
+
+        else {
             intakePower = 0;
         }
 
-        intakeMotor1.setPower(-intakePower);
-        intakeMotor2.setPower(intakePower);
-
         position = Range.clip(position, 0, 1);
         power = Range.clip(power, -1, 1);
+
+        intakeMotor1.setPower(-intakePower);
+        intakeMotor2.setPower(intakePower);
 
         glyphServo1.setPosition(position);
         glyphServo2.setPosition(1 - position);
