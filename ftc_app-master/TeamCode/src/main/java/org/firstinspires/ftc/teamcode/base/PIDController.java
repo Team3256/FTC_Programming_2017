@@ -8,7 +8,8 @@ public class PIDController {
 
     double P, I, D, kP, kI, kD, error, prevError, changeError, sumError, PID;
 
-    public void PIDController(double kP, double kI, double kD){
+
+    public PIDController(double kP, double kI, double kD){
 
         this.kP = kP;
         this.kI = kI;
