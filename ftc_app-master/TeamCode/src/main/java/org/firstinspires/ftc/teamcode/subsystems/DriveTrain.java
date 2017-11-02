@@ -5,21 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
-import static android.R.attr.direction;
-import static android.R.attr.hardwareAccelerated;
-import static android.R.attr.left;
-import static android.R.attr.name;
-import static android.R.attr.right;
-import static com.qualcomm.hardware.bosch.BNO055IMU.SensorMode.IMU;
-import static com.sun.tools.doclint.HtmlTag.I;
-import static com.sun.tools.javac.jvm.ByteCodes.ret;
 
 /**
- * Created by Team 6696 on 9/25/2017.
+ * Created by Team 2891 on 9/25/2017.
  */
 
 public class DriveTrain {
@@ -29,6 +20,8 @@ public class DriveTrain {
     private static DriveTrain driveTrain = new DriveTrain();
 
     public PIDController pidController;
+
+    double PID;
 
     private static HardwareMap hardwareMap;
 
@@ -142,6 +135,13 @@ public class DriveTrain {
         return degrees*Constants.WHEEL_DIAMETER*Math.PI/360;
     }
 
+    public void setTargetPos(int pos){
+        leftFront.setTargetPosition(pos);
+        leftBack.setTargetPosition(pos);
+        rightFront.setTargetPosition(pos);
+        rightBack.setTargetPosition(pos);
+    }
+
     public double getRightEncoder(){
         return (Math.abs(rightFront.getCurrentPosition())+Math.abs(rightBack.getCurrentPosition()))/2;
     }
@@ -174,6 +174,37 @@ public class DriveTrain {
 
     }
 
+    public void driveToDistance(double inches, double power, boolean forward, double timeout){
+
+        if (!forward){flipDirection();}
+        int ticks = (int)inchesToTicks(inches);
+        setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pidController = new PIDController(0.01, 0, 0);
+        double correctionSide;
+        gyro.reset();
+        resetEncoders();
+        double startTime = System.currentTimeMillis();
+        while(System.currentTimeMillis() - startTime <= timeout){
+
+            PID = pidController.calculatePID(gyro.getHeading(), 0);
+
+            correctionSide = gyro.getHeading()/Math.abs(gyro.getHeading());
+
+            if (Math.abs(pidController.getError(gyro.getHeading(), 0)) <= 1){PID = 1;}
+
+            runRight(PID*power*correctionSide);
+            runLeft(PID*power*correctionSide);
+
+            if (getAverageEncoderValue() >= ticks){
+                break;
+            }
+        }
+
+        runRight(0);
+        runLeft(0);
+
+    }
+
     public void turn(double degrees, double power, boolean right){
 
         int direction = right ? 1 : -1;
@@ -181,6 +212,10 @@ public class DriveTrain {
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyro.reset();
+    }
+
+    public boolean isBusy (){
+        return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();
     }
 
 }
