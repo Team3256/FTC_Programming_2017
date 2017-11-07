@@ -174,26 +174,24 @@ public class DriveTrain {
 
     }
 
-    public void driveToDistance(double inches, double power, boolean forward, double timeout){
+    public void driveToDistance(double inches, boolean forward, double timeout){
 
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
-        setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pidController = new PIDController(0.01, 0, 0);
-        double correctionSide;
+        boolean correctionSide;
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime <= timeout){
 
-            PID = pidController.calculatePID(gyro.getHeading(), 0);
+            PID = pidController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
-            correctionSide = gyro.getHeading()/Math.abs(gyro.getHeading());
+            if (pidController.getError(gyro.getHeading(), 0) <= 0.75){PID = 0;}
 
-            if (Math.abs(pidController.getError(gyro.getHeading(), 0)) <= 1){PID = 1;}
-
-            runRight(PID*power*correctionSide);
-            runLeft(PID*power*correctionSide);
+            runRight(PID);
+            runLeft(PID);
 
             if (getAverageEncoderValue() >= ticks){
                 break;
