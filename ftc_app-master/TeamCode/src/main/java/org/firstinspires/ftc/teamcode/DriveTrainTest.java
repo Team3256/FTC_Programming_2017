@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,7 +13,7 @@ import static com.sun.tools.javac.main.Option.D;
 /**
  * Created by Team 3256 on 9/27/2017.
  */
-@TeleOp
+@Autonomous
 public class DriveTrainTest extends LinearOpMode {
 
     DriveTrain driveTrain = DriveTrain.getInstance();
@@ -45,14 +46,13 @@ public class DriveTrainTest extends LinearOpMode {
 
 
         //Arcade Drive
-        while (opModeIsActive()){
             //
-            left = gamepad1.left_stick_y;
+            /*left = gamepad1.left_stick_y;
             right = -gamepad1.right_stick_x;
             telemetry.addData("Left", left);
             telemetry.addData("Right", right);
-            driveTrain.arcadeDrive(left, right);
+            driveTrain.arcadeDrive(left, right); */
 
-        }
+        driveTrain.driveToDistance(10, true, 2.5);
     }
 }

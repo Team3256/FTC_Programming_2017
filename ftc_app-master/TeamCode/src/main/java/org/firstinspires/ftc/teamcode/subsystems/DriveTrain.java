@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
+import static com.sun.tools.doclint.Entity.pi;
+
 
 /**
  * Created by Team 2891 on 9/25/2017.
@@ -18,10 +20,6 @@ public class DriveTrain {
     DcMotor leftFront, rightFront, leftBack, rightBack;
 
     private static DriveTrain driveTrain = new DriveTrain();
-
-    public PIDController pidController;
-
-    double PID;
 
     private static HardwareMap hardwareMap;
 
@@ -174,26 +172,32 @@ public class DriveTrain {
 
     }
 
-    public void driveToDistance(double inches, boolean forward, double timeout){
+    public String driveToDistance(double inches, boolean forward, double timeout){
 
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
+        String message = "Works";
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        pidController = new PIDController(0.01, 0, 0);
-        boolean correctionSide;
+        PIDController distancePIDController = new PIDController(0.01, 0, 0); //distance PID
+        PIDController gyroPIDController = new PIDController(0.01, 0, 0); //gyro PID
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime <= timeout){
+        while(System.currentTimeMillis() - startTime <= timeout*60000){
 
-            PID = pidController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
+            double distancePID = distancePIDController.calculatePID(getAverageEncoderValue(), inchesToTicks(inches));
 
-            if (pidController.getError(gyro.getHeading(), 0) <= 0.75){PID = 0;}
+            double gyroPID = gyroPIDController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
-            runRight(PID);
-            runLeft(PID);
+            if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
 
-            if (getAverageEncoderValue() >= ticks){
+            if (distancePID <= 0.1) {break;}
+
+            runRight(distancePID + gyroPID);
+            runLeft(distancePID - gyroPID);
+
+            if (getAverageEncoderValue() >= ticks + 200){
+                message = "-----------------------------------";
                 break;
             }
         }
@@ -201,16 +205,20 @@ public class DriveTrain {
         runRight(0);
         runLeft(0);
 
+        return message;
+
     }
 
+    /*
     public void turn(double degrees, double power, boolean right){
 
         int direction = right ? 1 : -1;
-        pidController = new PIDController(0, 0, 0);
+        PIDController turnPIDController = new PIDController(0, 0, 0);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyro.reset();
     }
+    */
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();
