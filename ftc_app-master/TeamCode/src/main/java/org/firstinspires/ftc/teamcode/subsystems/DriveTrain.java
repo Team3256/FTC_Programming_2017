@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.drm.DrmInfoEvent;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,22 +11,22 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
-import static com.sun.tools.doclint.Entity.pi;
+import static org.firstinspires.ftc.teamcode.DriveTrainTest.telemetryPass;
 
 
 /**
  * Created by Team 2891 on 9/25/2017.
  */
-
+@TeleOp
 public class DriveTrain {
 
-    DcMotor leftFront, rightFront, leftBack, rightBack;
+    private DcMotor leftFront, rightFront, leftBack, rightBack;
 
     private static DriveTrain driveTrain = new DriveTrain();
 
     private static HardwareMap hardwareMap;
 
-    public static IMUWrapper gyro = new IMUWrapper("imu", hardwareMap);
+    private static IMUWrapper gyro = new IMUWrapper("imu", hardwareMap);
 
     private DriveTrain(){
 
@@ -31,7 +34,15 @@ public class DriveTrain {
 
     public void init(HardwareMap hardwareMap){
 
-        this.hardwareMap = hardwareMap;
+        hardwareMap = hardwareMap;
+
+
+        telemetryPass.addData("hardwareMap",hardwareMap==null);
+        telemetryPass.update();
+
+        gyro.calibrate();
+
+
         //Initializing motors
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftBack = hardwareMap.dcMotor.get("leftBack");
@@ -52,8 +63,10 @@ public class DriveTrain {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        resetEncoders();
 
-        setPower(0);
+        //setPower(0);
+
     }
 
     public void setPower(double power){
@@ -183,7 +196,7 @@ public class DriveTrain {
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime <= timeout*60000){
+        while(System.currentTimeMillis() - startTime <= timeout*1000){
 
             double distancePID = distancePIDController.calculatePID(getAverageEncoderValue(), inchesToTicks(inches));
 
@@ -191,7 +204,9 @@ public class DriveTrain {
 
             if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
 
-            if (distancePID <= 0.1) {break;}
+            if (distancePIDController.getError(getAverageEncoderValue(), inchesToTicks(inches)) <= 0.1) {
+                break;
+            }
 
             runRight(distancePID + gyroPID);
             runLeft(distancePID - gyroPID);

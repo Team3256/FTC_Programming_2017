@@ -4,10 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.vuforia.ar.pl.DrawOverlayView;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
+import static android.R.attr.left;
+import static android.R.attr.right;
 import static com.sun.tools.javac.main.Option.D;
 
 /**
@@ -15,25 +19,23 @@ import static com.sun.tools.javac.main.Option.D;
  */
 @Autonomous
 public class DriveTrainTest extends LinearOpMode {
-
-    DriveTrain driveTrain = DriveTrain.getInstance();
-
-    double left = 0, right = 0;
+    public static Telemetry telemetryPass;
+    private DriveTrain driveTrain = DriveTrain.getInstance();
 
 
     @Override
 
     public void runOpMode() throws InterruptedException {
-
+        DriveTrainTest.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
 
         super.waitForStart();
 
         //Tank Drive
 
-        /*while (opModeIsActive()){
+        while (opModeIsActive()){
 
-            right = -gamepad1.left_stick_y;
+            /*right = -gamepad1.left_stick_y;
             left = -gamepad1.right_stick_y;
             telemetry.addData("Left", left);
             telemetry.addData("Right", right);
@@ -53,6 +55,8 @@ public class DriveTrainTest extends LinearOpMode {
             telemetry.addData("Right", right);
             driveTrain.arcadeDrive(left, right); */
 
-        driveTrain.driveToDistance(10, true, 2.5);
+        driveTrain.driveToDistance(10, true, 30);
+
+        }
     }
 }
