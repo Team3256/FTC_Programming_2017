@@ -194,7 +194,7 @@ public class DriveTrain {
         int ticks = (int)inchesToTicks(inches);
         String message = "Works";
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.01); //distance PID
+        PIDController distancePIDController = new PIDController(0.000075, 0.0 , 0.00); //distance PID
         PIDController gyroPIDController = new PIDController(0, 0, 0); //gyro PID
         gyro.reset();
         resetEncoders();
