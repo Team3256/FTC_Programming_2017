@@ -10,6 +10,7 @@ import com.vuforia.ar.pl.DrawOverlayView;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
+import static android.R.attr.flipInterval;
 import static android.R.attr.left;
 import static android.R.attr.right;
 import static com.sun.tools.javac.main.Option.D;
@@ -19,6 +20,7 @@ import static com.sun.tools.javac.main.Option.D;
  */
 @Autonomous
 public class DriveTrainTest extends LinearOpMode {
+
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
 
@@ -29,11 +31,13 @@ public class DriveTrainTest extends LinearOpMode {
         DriveTrainTest.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
 
+        float left, right;
+
         super.waitForStart();
 
         //Tank Drive
 
-        while (opModeIsActive()){
+        //while (opModeIsActive()){
 
             /*right = -gamepad1.left_stick_y;
             left = -gamepad1.right_stick_y;
@@ -55,8 +59,8 @@ public class DriveTrainTest extends LinearOpMode {
             telemetry.addData("Right", right);
             driveTrain.arcadeDrive(left, right); */
 
-        driveTrain.driveToDistance(10, true, 30);
+        driveTrain.driveToDistance(10, true, 30, this);
 
-        }
+        //}
     }
 }

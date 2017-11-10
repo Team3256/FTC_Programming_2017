@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import android.drm.DrmInfoEvent;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
@@ -24,9 +27,9 @@ public class DriveTrain {
 
     private static DriveTrain driveTrain = new DriveTrain();
 
-    private static HardwareMap hardwareMap;
+    private HardwareMap hardwareMap;
 
-    private static IMUWrapper gyro = new IMUWrapper("imu", hardwareMap);
+    private IMUWrapper gyro;
 
     private DriveTrain(){
 
@@ -34,14 +37,14 @@ public class DriveTrain {
 
     public void init(HardwareMap hardwareMap){
 
-        hardwareMap = hardwareMap;
+        this.hardwareMap = hardwareMap;
 
+        gyro = new IMUWrapper("imu", hardwareMap);
 
         telemetryPass.addData("hardwareMap",hardwareMap==null);
         telemetryPass.update();
 
         gyro.calibrate();
-
 
         //Initializing motors
         leftFront = hardwareMap.dcMotor.get("leftFront");
@@ -127,7 +130,7 @@ public class DriveTrain {
     }
 
     public double inchesToDegrees(double inches){
-        return inches*360/Constants.WHEEL_DIAMETER*Math.PI;
+        return inches*360/Constants.WHEEL_DIAMETER*Math.PI*Constants.GEAR_RATIO;
     }
 
     public double degreesToTicks(double degrees){
@@ -185,42 +188,38 @@ public class DriveTrain {
 
     }
 
-    public String driveToDistance(double inches, boolean forward, double timeout){
+    public void driveToDistance(double inches, boolean forward, double timeout, LinearOpMode opMode){
 
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
         String message = "Works";
-        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        PIDController distancePIDController = new PIDController(0.01, 0, 0); //distance PID
-        PIDController gyroPIDController = new PIDController(0.01, 0, 0); //gyro PID
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.01); //distance PID
+        PIDController gyroPIDController = new PIDController(0, 0, 0); //gyro PID
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime <= timeout*1000){
+        double error = 0;
+        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
 
-            double distancePID = distancePIDController.calculatePID(getAverageEncoderValue(), inchesToTicks(inches));
+            double distancePID = distancePIDController.calculatePID(getAverageEncoderValue(), ticks);
 
             double gyroPID = gyroPIDController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
             if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
-
-            if (distancePIDController.getError(getAverageEncoderValue(), inchesToTicks(inches)) <= 0.1) {
+            error = distancePIDController.getError(getAverageEncoderValue(), inchesToTicks(inches));
+            if (error <= 10) {
                 break;
             }
+            telemetryPass.addData("Error:",error);
+            telemetryPass.update();
 
             runRight(distancePID + gyroPID);
             runLeft(distancePID - gyroPID);
-
-            if (getAverageEncoderValue() >= ticks + 200){
-                message = "-----------------------------------";
-                break;
-            }
         }
 
         runRight(0);
         runLeft(0);
-
-        return message;
 
     }
 
