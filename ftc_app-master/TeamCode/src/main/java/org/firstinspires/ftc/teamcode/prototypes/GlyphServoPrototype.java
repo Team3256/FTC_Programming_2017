@@ -27,9 +27,10 @@ import static com.sun.tools.javac.main.Option.D;
 
 public class GlyphServoPrototype extends OpMode {
 
-    Servo glyphServo1;
-    Servo glyphServo2;
-    Servo glyphIntake1;
+    Servo glyphClaw1;
+    Servo glyphClaw2;
+    Servo glyphPivot1;
+    Servo glyphPivot2;
     DcMotor linearMotion;
     DcMotor intakeMotor1;
     DcMotor intakeMotor2;
@@ -40,28 +41,42 @@ public class GlyphServoPrototype extends OpMode {
 
     @Override
     public void init() {
-        glyphServo1 = hardwareMap.servo.get("glyphServo1");
-        glyphServo2 = hardwareMap.servo.get("glyphServo2");
-        glyphIntake1 = hardwareMap.servo.get("glyphIntake1");
+        /*
+        glyphClaw1 = hardwareMap.servo.get("glyphClaw1");
+        glyphClaw2 = hardwareMap.servo.get("glyphClaw2");*/
+
+        glyphPivot1 = hardwareMap.servo.get("glyphPivot1");
+        glyphPivot2 = hardwareMap.servo.get("glyphPivot2");
+        /*
         linearMotion = hardwareMap.dcMotor.get("glyphLift");
         intakeMotor1 = hardwareMap.dcMotor.get("intakeMotor1");
         intakeMotor2 = hardwareMap.dcMotor.get("intakeMotor2");
 
-        glyphServo1.setPosition(glyphServo1.getPosition());
-        glyphServo2.setPosition(glyphServo2.getPosition());
-        glyphIntake1.setPosition(glyphIntake1.getPosition());
-        glyphIntake1.setDirection(Servo.Direction.REVERSE);
 
+
+        glyphClaw1.setPosition(glyphClaw1.getPosition());
+        glyphClaw2.setPosition(glyphClaw2.getPosition());
+        */
+
+
+        glyphPivot1.setPosition(glyphPivot1.getPosition());
+        glyphPivot1.setDirection(Servo.Direction.REVERSE);
+        glyphPivot2.setPosition(glyphPivot2.getPosition());
+        glyphPivot2.setDirection(Servo.Direction.FORWARD);
+
+        /*
         linearMotion.setDirection(DcMotorSimple.Direction.FORWARD);
         linearMotion.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         intakeMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        */
 
-        linearMotion.setPower(power);
-        intakeMotor1.setPower(intakePower);
-        intakeMotor2.setPower(intakePower);
+        //linearMotion.setPower(power);
+        //intakeMotor1.setPower(intakePower);
+        //intakeMotor2.setPower(intakePower);
     }
 
     @Override
@@ -77,51 +92,42 @@ public class GlyphServoPrototype extends OpMode {
             position -= .007;
 
         }
-
+        
         if (gamepad1.y) {
             power = -.75;
+        } 
+        
+        
+        else if (gamepad1.a){
+           power = .5;
         }
-
-
-        //else if (gamepad1.a){
-           // power = .5;
-        //}
 
         else{
             power = 0;
         }
 
         if (gamepad1.b) {
-            glyphIntake1.setPosition(0.02128);
-            //glyphIntake1.setPosition(1);
-            //intakePower = 1;
-        } else {
-            glyphIntake1.setPosition(0.05);
-            //glyphIntake1.setPosition(0);
-            //intakePower = 0;
-        }
-
-        if (gamepad1.y){
+            glyphPivot1.setPosition(0.01); //0.02128
+            glyphPivot2.setPosition(0.01);
+            //glyphPivot1.setPosition(1);
             intakePower = 1;
-        }
-
-        else if (gamepad1.a){
-            intakePower = -1;
-        }
-
-        else {
+        } else {
+            glyphPivot1.setPosition(0.05);
+            glyphPivot2.setPosition(0.05);
+            //glyphPivot1.setPosition(0);
             intakePower = 0;
         }
 
         position = Range.clip(position, 0, 1);
         power = Range.clip(power, -1, 1);
 
-        intakeMotor1.setPower(-intakePower);
-        intakeMotor2.setPower(intakePower);
+        //intakeMotor1.setPower(-intakePower);
+        //intakeMotor2.setPower(intakePower);
 
-        glyphServo1.setPosition(position);
-        glyphServo2.setPosition(1 - position);
-        linearMotion.setPower(power);
+        /*
+        glyphClaw1.setPosition(position);
+        glyphClaw2.setPosition(1 - position);*/
+        //linearMotion.setPower(power);
         telemetry.addData("Position", position);
         telemetry.update();
 

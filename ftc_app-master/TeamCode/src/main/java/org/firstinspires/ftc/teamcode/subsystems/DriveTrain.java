@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import android.drm.DrmInfoEvent;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
-import static org.firstinspires.ftc.teamcode.DriveTrainTest.telemetryPass;
+import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
 
 
 /**
@@ -130,11 +126,11 @@ public class DriveTrain {
     }
 
     public double inchesToDegrees(double inches){
-        return inches*360/Constants.WHEEL_DIAMETER*Math.PI*Constants.GEAR_RATIO;
+        return (360/(Constants.WHEEL_DIAMETER*Math.PI))*inches;
     }
 
     public double degreesToTicks(double degrees){
-        return degrees*Constants.TICKS_PER_ROTATION/360;
+        return (degrees/360)*Constants.TICKS_PER_ROTATION;
     }
 
     public double inchesToTicks(double inches){
@@ -142,11 +138,11 @@ public class DriveTrain {
     }
 
     public double ticksToDegrees(double ticks){
-        return ticks*360/Constants.TICKS_PER_ROTATION;
+        return ticks*(360/Constants.TICKS_PER_ROTATION);
     }
 
     public double degreesToInches(double degrees){
-        return degrees*Constants.WHEEL_DIAMETER*Math.PI/360;
+        return (Constants.WHEEL_DIAMETER*Math.PI)*(degrees/360);
     }
 
     public void setTargetPos(int pos){
@@ -188,13 +184,11 @@ public class DriveTrain {
 
     }
 
-    public void driveToDistance(double inches, boolean forward, double timeout, LinearOpMode opMode){
-
+    public void driveToDistance(double inches, boolean forward, double timeout, LinearOpMode opMode) throws InterruptedException {
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
-        String message = "Works";
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.000075, 0.0 , 0.00); //distance PID
+        PIDController distancePIDController = new PIDController(0.000075, 0.0 , 0.0); //distance PID
         PIDController gyroPIDController = new PIDController(0, 0, 0); //gyro PID
         gyro.reset();
         resetEncoders();
@@ -207,19 +201,35 @@ public class DriveTrain {
             double gyroPID = gyroPIDController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
             if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
-            error = distancePIDController.getError(getAverageEncoderValue(), inchesToTicks(inches));
-            if (error <= 10) {
+            error = distancePIDController.getError(getAverageEncoderValue(), ticks);
+            if (error <= 20) {
                 break;
             }
-            telemetryPass.addData("Error:",error);
-            telemetryPass.update();
+
+
+            gyroPID = 0;
 
             runRight(distancePID + gyroPID);
             runLeft(distancePID - gyroPID);
+
+            telemetryPass.addData("Error",error);
+            telemetryPass.addData("Left encoder ticks",getLeftEncoder());
+            telemetryPass.addData("Right encoder ticks",getRightEncoder());
+            telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));
+            telemetryPass.update();
         }
 
         runRight(0);
         runLeft(0);
+
+        telemetryPass.addData("Loop","finished");
+        telemetryPass.addData("Error",error);
+        telemetryPass.addData("Left encoder ticks",getLeftEncoder());
+        telemetryPass.addData("Right encoder ticks",getRightEncoder());
+        telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));
+        telemetryPass.update();
+
+        Thread.sleep(20000);
 
     }
 
