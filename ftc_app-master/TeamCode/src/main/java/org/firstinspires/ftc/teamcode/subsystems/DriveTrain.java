@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.internal.android.dx.rop.cst.Constant;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
@@ -126,11 +129,11 @@ public class DriveTrain {
     }
 
     public double inchesToDegrees(double inches){
-        return (360/(Constants.WHEEL_DIAMETER*Math.PI))*inches;
+        return (inches*360)/(Constants.WHEEL_DIAMETER * Math.PI * Constants.GEAR_RATIO);
     }
 
     public double degreesToTicks(double degrees){
-        return (degrees/360)*Constants.TICKS_PER_ROTATION;
+        return (degrees * Constants.TICKS_PER_ROTATION)/360;
     }
 
     public double inchesToTicks(double inches){
@@ -188,8 +191,8 @@ public class DriveTrain {
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.000075, 0.0 , 0.0); //distance PID
-        PIDController gyroPIDController = new PIDController(0, 0, 0); //gyro PID
+        PIDController distancePIDController = new PIDController(0.00095, 0.0 , 0.005); //distance PID
+        PIDController gyroPIDController = new PIDController(0.01, 0, 0.008); //gyro PID
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
@@ -202,12 +205,11 @@ public class DriveTrain {
 
             if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
             error = distancePIDController.getError(getAverageEncoderValue(), ticks);
-            if (error <= 20) {
+            if (error <= 5) {
                 break;
             }
 
-
-            gyroPID = 0;
+            //gyroPID = 0;
 
             runRight(distancePID + gyroPID);
             runLeft(distancePID - gyroPID);
