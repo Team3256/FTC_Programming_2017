@@ -191,8 +191,8 @@ public class DriveTrain {
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.00095, 0.0 , 0.005); //distance PID
-        PIDController gyroPIDController = new PIDController(0.01, 0, 0.008); //gyro PID
+        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.0005); //distance PID
+        PIDController gyroPIDController = new PIDController(0.002, 0, 0.0);
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
@@ -203,7 +203,7 @@ public class DriveTrain {
 
             double gyroPID = gyroPIDController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
-            if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;}
+            if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;} //possibly comment out
             error = distancePIDController.getError(getAverageEncoderValue(), ticks);
             if (error <= 5) {
                 break;
@@ -215,6 +215,8 @@ public class DriveTrain {
             runLeft(distancePID - gyroPID);
 
             telemetryPass.addData("Error",error);
+            telemetryPass.addData("Distance PID: ", distancePID);
+            telemetryPass.addData("Gyro PID: ", gyroPID);
             telemetryPass.addData("Left encoder ticks",getLeftEncoder());
             telemetryPass.addData("Right encoder ticks",getRightEncoder());
             telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));

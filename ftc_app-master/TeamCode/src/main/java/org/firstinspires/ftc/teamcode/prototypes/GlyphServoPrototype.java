@@ -29,15 +29,19 @@ public class GlyphServoPrototype extends OpMode {
 
     Servo glyphClaw1;
     Servo glyphClaw2;
-    Servo glyphPivot1;
-    Servo glyphPivot2;
+    Servo rightPivot;
+    Servo leftPivot;
     DcMotor linearMotion;
     DcMotor intakeMotor1;
     DcMotor intakeMotor2;
     double power;
     double intakePower = 0;
-    //boolean intaked = false;
+
     double position = 0;
+    double pivotPos1 = 1;
+    double pivotPos2 = 0;
+
+    int counter = 0;
 
     @Override
     public void init() {
@@ -45,8 +49,8 @@ public class GlyphServoPrototype extends OpMode {
         glyphClaw1 = hardwareMap.servo.get("glyphClaw1");
         glyphClaw2 = hardwareMap.servo.get("glyphClaw2");*/
 
-        glyphPivot1 = hardwareMap.servo.get("glyphPivot1");
-        glyphPivot2 = hardwareMap.servo.get("glyphPivot2");
+        rightPivot = hardwareMap.servo.get("glyphPivot1");
+        leftPivot = hardwareMap.servo.get("glyphPivot2");
         /*
         linearMotion = hardwareMap.dcMotor.get("glyphLift");
         intakeMotor1 = hardwareMap.dcMotor.get("intakeMotor1");
@@ -59,10 +63,10 @@ public class GlyphServoPrototype extends OpMode {
         */
 
 
-        glyphPivot1.setPosition(glyphPivot1.getPosition());
-        glyphPivot1.setDirection(Servo.Direction.REVERSE);
-        glyphPivot2.setPosition(glyphPivot2.getPosition());
-        glyphPivot2.setDirection(Servo.Direction.FORWARD);
+        rightPivot.setPosition(rightPivot.getPosition());
+        rightPivot.setDirection(Servo.Direction.REVERSE);
+        leftPivot.setPosition(leftPivot.getPosition());
+        leftPivot.setDirection(Servo.Direction.FORWARD);
 
         /*
         linearMotion.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -106,17 +110,25 @@ public class GlyphServoPrototype extends OpMode {
             power = 0;
         }
 
+
+
+
         if (gamepad1.b) {
-            glyphPivot1.setPosition(0.01); //0.02128
-            glyphPivot2.setPosition(0.01);
-            //glyphPivot1.setPosition(1);
-            intakePower = 1;
+            counter++;
+            rightPivot.setPosition(0+counter*.001); //0.02128
+            leftPivot.setPosition(0+counter*.001);
+            //rightPivot.setPosition(1);
+            telemetry.addData("pressed","an");
+            //intakePower = 1;
         } else {
-            glyphPivot1.setPosition(0.05);
-            glyphPivot2.setPosition(0.05);
-            //glyphPivot1.setPosition(0);
-            intakePower = 0;
+            rightPivot.setPosition(0);
+            leftPivot.setPosition(0);
+            //rightPivot.setPosition(0);
+            //intakePower = 0;
         }
+
+
+
 
         position = Range.clip(position, 0, 1);
         power = Range.clip(power, -1, 1);
@@ -128,7 +140,8 @@ public class GlyphServoPrototype extends OpMode {
         glyphClaw1.setPosition(position);
         glyphClaw2.setPosition(1 - position);*/
         //linearMotion.setPower(power);
-        telemetry.addData("Position", position);
+        telemetry.addData("getPosition()right returns", pivotPos1);
+        telemetry.addData("getPosition()left returns", pivotPos2);
         telemetry.update();
 
     }
