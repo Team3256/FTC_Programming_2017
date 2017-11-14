@@ -114,9 +114,8 @@ public class GlyphServoPrototype extends OpMode {
 
 
         if (gamepad1.b) {
-            counter++;
-            rightPivot.setPosition(0+counter*.001); //0.02128
-            leftPivot.setPosition(0+counter*.001);
+            rightPivot.setPosition(1); //0.02128
+            leftPivot.setPosition(1);
             //rightPivot.setPosition(1);
             telemetry.addData("pressed","an");
             //intakePower = 1;
