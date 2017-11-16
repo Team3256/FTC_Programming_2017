@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.internal.android.dx.rop.cst.Constant;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
+import static com.sun.tools.javac.jvm.ByteCodes.error;
 import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
 
 
@@ -148,6 +149,8 @@ public class DriveTrain {
         return (Constants.WHEEL_DIAMETER*Math.PI)*(degrees/360);
     }
 
+    public double ticksToInches(double ticks) { return degreesToInches(ticksToDegrees(ticks)); }
+
     public void setTargetPos(int pos){
         leftFront.setTargetPosition(pos);
         leftBack.setTargetPosition(pos);
@@ -191,35 +194,34 @@ public class DriveTrain {
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.0005); //distance PID
-        PIDController gyroPIDController = new PIDController(0.002, 0, 0.0);
+        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.0006); //distance PID
+        PIDController gyroPIDController = new PIDController(0.00000000025, 0, 0.00005);
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
-        double error = 0;
+        double errorDistance = 0;
         while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
 
             double distancePID = distancePIDController.calculatePID(getAverageEncoderValue(), ticks);
 
             double gyroPID = gyroPIDController.calculatePID(gyro.getHeading(), 0) * (forward ? 1 : -1);
 
-            if (gyroPIDController.getError(gyro.getHeading(), 0) <= 0.75){gyroPID = 0;} //possibly comment out
-            error = distancePIDController.getError(getAverageEncoderValue(), ticks);
-            if (error <= 5) {
+            if (gyroPIDController.getError(gyro.getHeading(), 0) <= 1.75){gyroPID = 0;} //possibly comment out
+            errorDistance = distancePIDController.getError(getAverageEncoderValue(), ticks);
+
+            if (errorDistance <= 5) {
                 break;
             }
-
-            //gyroPID = 0;
 
             runRight(distancePID + gyroPID);
             runLeft(distancePID - gyroPID);
 
             telemetryPass.addData("Error",error);
             telemetryPass.addData("Distance PID: ", distancePID);
-            telemetryPass.addData("Gyro PID: ", gyroPID);
+            telemetryPass.addData("Gyro", gyro.getHeading());
             telemetryPass.addData("Left encoder ticks",getLeftEncoder());
             telemetryPass.addData("Right encoder ticks",getRightEncoder());
-            telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));
+            telemetryPass.addData("Inches",ticksToInches(getAverageEncoderValue()));
             telemetryPass.update();
         }
 
@@ -228,6 +230,7 @@ public class DriveTrain {
 
         telemetryPass.addData("Loop","finished");
         telemetryPass.addData("Error",error);
+        telemetryPass.addData("Gyro", gyro.getHeading());
         telemetryPass.addData("Left encoder ticks",getLeftEncoder());
         telemetryPass.addData("Right encoder ticks",getRightEncoder());
         telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));

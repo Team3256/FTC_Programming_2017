@@ -18,6 +18,7 @@ import static android.R.attr.right;
 import static android.R.attr.searchHintIcon;
 import static com.sun.tools.doclint.HtmlTag.P;
 import static com.sun.tools.javac.main.Option.D;
+import static com.sun.tools.javac.main.Option.S;
 
 /**
  * Created by Team 3256 on 10/11/2017.

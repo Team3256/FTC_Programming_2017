@@ -29,7 +29,10 @@ public class encoderTest extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            telemetryPass.addData("Encoder:", driveTrain.getAverageEncoderValue());
+            //telemetryPass.addData("Encoder:", driveTrain.getAverageEncoderValue());
+            telemetryPass.addData("Right Encoder", driveTrain.getRightEncoder());
+            telemetryPass.addData("Left Encoder", driveTrain.getLeftEncoder());
+            telemetryPass.addData("Inches", Double.toString(driveTrain.ticksToInches(driveTrain.getAverageEncoderValue())));
             telemetryPass.update();
         }
 
