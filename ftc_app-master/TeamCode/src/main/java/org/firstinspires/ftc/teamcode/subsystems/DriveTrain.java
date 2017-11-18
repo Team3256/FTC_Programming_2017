@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
 import static com.sun.tools.javac.jvm.ByteCodes.error;
-import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
+import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
 
 
 /**
@@ -115,14 +115,19 @@ public class DriveTrain {
     }
 
     public void arcadeDrive(double throttle, double turn){
-        double left = Math.pow((throttle + turn), 3);
-        double right = Math.pow((throttle - turn), 3);
+        double left = Math.pow((throttle + turn), 1);
+        double right = Math.pow((throttle - turn), 1);
 
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
 
         runLeft(left);
         runRight(right);
+
+        telemetryPass.addData("Right Front", rightFront.getCurrentPosition());
+        telemetryPass.addData("Right Back", rightBack.getCurrentPosition());
+        telemetryPass.addData("Left Front", leftFront.getCurrentPosition());
+        telemetryPass.addData("Left Back", leftBack.getCurrentPosition());
     }
 
     public static DriveTrain getInstance() {
@@ -240,16 +245,16 @@ public class DriveTrain {
 
     }
 
-    /*
-    public void turn(double degrees, double power, boolean right){
+
+    /*public void turn(double degrees, double power, boolean right){
 
         int direction = right ? 1 : -1;
         PIDController turnPIDController = new PIDController(0, 0, 0);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyro.reset();
-    }
-    */
+    } */
+
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();

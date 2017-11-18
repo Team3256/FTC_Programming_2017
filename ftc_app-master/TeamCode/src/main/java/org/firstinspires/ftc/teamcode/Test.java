@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.VuforiaWrapper;
 
@@ -36,8 +39,8 @@ public class Test extends LinearOpMode {
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0); */
 
-        //DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        //ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
+        DistanceSensor sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+        ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
         //IMUWrapper imu = new IMUWrapper("imu", hardwareMap);
         VuforiaWrapper vuforiaWrapper = new VuforiaWrapper(hardwareMap);
 
@@ -52,12 +55,11 @@ public class Test extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            /*telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
+            telemetry.addData("Distance (cm)", sensorColorRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Color: Red", colorSensor.red());
             telemetry.addData("Color: Green", colorSensor.green());
             telemetry.addData("Color: Blue", colorSensor.blue());
             telemetry.update();
-            */
 
 /*
             left = -gamepad1.left_stick_y;
@@ -99,9 +101,9 @@ public class Test extends LinearOpMode {
             telemetry.addData("Offset", imu.offset);
             telemetry.update(); */
 
-            if (gamepad1.x){
+            /*if (gamepad1.x){
                 telemetry.addData(vuforiaWrapper.getPictograph(), "");
-            }
+            } */
 
             telemetry.update();
 
