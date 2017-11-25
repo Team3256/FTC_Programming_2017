@@ -25,9 +25,12 @@ public class AutoTest extends LinearOpMode{
 
 
         super.waitForStart();
-        driveTrain.driveToDistance(25, true, 30, this);
 
+        //driveTrain.turnEncoder(45, .5, true);
 
+        //driveTrain.driveToDistance(25, true, 30, this);
+
+        driveTrain.turnUsingEncoders(90,30,1,this);
 
     }
 

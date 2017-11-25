@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
@@ -23,7 +22,6 @@ public class DriveTrainTeleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainTeleop.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
-        driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         float left, right;
 

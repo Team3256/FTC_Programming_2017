@@ -13,8 +13,10 @@ import org.firstinspires.ftc.robotcore.internal.android.dx.rop.cst.Constant;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
+import static android.R.attr.right;
+import static com.sun.tools.javac.jvm.ByteCodes.bool_and;
 import static com.sun.tools.javac.jvm.ByteCodes.error;
-import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
+import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
 
 
 /**
@@ -115,11 +117,14 @@ public class DriveTrain {
     }
 
     public void arcadeDrive(double throttle, double turn){
+
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         double left = Math.pow((throttle + turn), 1);
         double right = Math.pow((throttle - turn), 1);
 
         right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1);
+        left = Range.clip(left, -1, 1)*.93;
 
         runLeft(left);
         runRight(right);
@@ -233,6 +238,12 @@ public class DriveTrain {
         runRight(0);
         runLeft(0);
 
+
+        telemetryPass.addData("Right Front", rightFront.getCurrentPosition());
+        telemetryPass.addData("Right Back", rightBack.getCurrentPosition());
+        telemetryPass.addData("Left Front", leftFront.getCurrentPosition());
+        telemetryPass.addData("Left Back", leftBack.getCurrentPosition());
+
         telemetryPass.addData("Loop","finished");
         telemetryPass.addData("Error",error);
         telemetryPass.addData("Gyro", gyro.getHeading());
@@ -245,19 +256,113 @@ public class DriveTrain {
 
     }
 
-
-    /*public void turn(double degrees, double power, boolean right){
-
-        int direction = right ? 1 : -1;
-        PIDController turnPIDController = new PIDController(0, 0, 0);
+    /*public void turnUsingEncoders(int degrees, double timeout, LinearOpMode opMode) {
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoders();
+        double startTime = System.currentTimeMillis();
+        PIDController encoderPIDController = new PIDController(0.1, 0, 0);
+        double errorDistance = 0;
 
+        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
+
+            double encoderPID = encoderPIDController.calculatePID(gyro.getHeading(), 0);
+
+            errorDistance = encoderPIDController.getError(getAverageEncoderValue(), degreesToTicks(degrees));
+
+            if (errorDistance <= 5) {
+                break;
+            }
+
+            runRight(encoderPID);
+            runLeft(encoderPID);
+
+            telemetryPass.addData("Error",error);
+            telemetryPass.addData("Left encoder ticks",getLeftEncoder());
+            telemetryPass.addData("Right encoder ticks",getRightEncoder());
+            telemetryPass.update();
+        }
+
+        runRight(0);
+        runLeft(0);
+    }*/
+
+    public void turnUsingEncoders(int degrees, double timeout, double power, LinearOpMode opMode) {
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoders();
         gyro.reset();
-    } */
+        double startTime = System.currentTimeMillis();
+        PIDController turnPIDController = new PIDController(0.1, 0, 0);
+        double gyroError = 0;
+        double targetTicks = degreesToTicks(Constants.ROBOT_TRACK*degrees/Constants.WHEEL_DIAMETER);
+        double rightPower = power;
+        double leftPower = power;
+        boolean reachedTarget = false;
+
+        if (degrees > 0){
+            rightPower *= -1;
+        }
+
+        else {
+            leftPower *= -1;
+        }
+
+        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive() && reachedTarget == false){
+
+            reachedTarget = ((Math.abs(getLeftEncoder()) > Math.abs(targetTicks)) && (Math.abs(getRightEncoder()) > Math.abs(targetTicks)));
+
+            runRight(rightPower);
+            runLeft(leftPower);
+
+            telemetryPass.addData("Target Ticks", targetTicks);
+            telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
+            telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+        }
+
+        gyro.getHeading();
+
+        runRight(0);
+        runLeft(0);
+
+        telemetryPass.addData("Target Ticks", targetTicks);
+        telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
+        telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+    }
+
 
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();
+    }
+
+    public void turnEncoder(double degrees, double power, boolean right) {
+        resetEncoders();
+        if (right) {
+            leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBack.setTargetPosition((int)(degreesToTicks(degrees)/2));
+            leftFront.setTargetPosition((int)(degreesToTicks(degrees)/2));
+            rightBack.setDirection(DcMotor.Direction.FORWARD);
+            rightFront.setDirection(DcMotor.Direction.FORWARD);
+            setPower(power);
+            while (isBusy()) {
+                telemetryPass.addData("left degrees", ticksToDegrees(getLeftEncoder()));
+                telemetryPass.update();
+            }
+            setPower(0);
+        } else {
+            rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBack.setTargetPosition((int) (degreesToTicks(degrees) / 2));
+            rightFront.setTargetPosition((int) (degreesToTicks(degrees) / 2));
+            leftBack.setDirection(DcMotor.Direction.REVERSE);
+            leftFront.setDirection(DcMotor.Direction.REVERSE);
+            setPower(power);
+            while (isBusy()) {
+                telemetryPass.addData("right degrees", ticksToDegrees(getRightEncoder()));
+                telemetryPass.update();
+            }
+            setPower(0);
+        }
     }
 
 }
