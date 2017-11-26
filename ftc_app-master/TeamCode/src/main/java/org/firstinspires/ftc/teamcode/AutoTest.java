@@ -30,7 +30,9 @@ public class AutoTest extends LinearOpMode{
 
         //driveTrain.driveToDistance(25, true, 30, this);
 
-        driveTrain.turnUsingEncoders(90,30,1,this);
+        //driveTrain.turnWithPID(90,30,1,this);
+
+        driveTrain.turnWithPID(90,30,1,this);
 
     }
 

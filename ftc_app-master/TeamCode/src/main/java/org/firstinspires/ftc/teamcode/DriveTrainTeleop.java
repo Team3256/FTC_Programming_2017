@@ -32,7 +32,7 @@ public class DriveTrainTeleop extends LinearOpMode {
         while (opModeIsActive()){
 
 
-            left = gamepad1.left_stick_y;
+            left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_x;
             if(Math.abs(gamepad1.left_stick_y) < 0.15){
                 gamepad1.left_stick_y = 0;
