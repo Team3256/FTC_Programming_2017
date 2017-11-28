@@ -25,6 +25,9 @@ import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
 /**
  * Created by Team 2891 on 9/25/2017.
  */
+
+//Created by Team 2891, destroyed by Albert!!!
+    
 @TeleOp
 public class DriveTrain {
 
@@ -307,7 +310,7 @@ public class DriveTrain {
 
             turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnRight ? 1 : -1);
 
-            if ((Math.abs(gyro.getHeading() - Math.abs(degrees))) <= 0.5) {
+            if ((Math.abs(gyro.getHeading() - degrees)) <= 0.5) {
                 break;
             }
 
@@ -368,20 +371,24 @@ public class DriveTrain {
 
         Thread.sleep(2000);
 
-        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive() && Math.abs(gyro.getHeading() - degrees) > .5){
+        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
 
             gyroError = degrees - gyro.getHeading();
-                if (gyroError > 0){
-                    runLeft(-0.000001); //the reason the motor values are switched
-                    runRight(0.000001);
-                    Thread.sleep(100);
-                }
-                else {
-                    runLeft(0.000001);
-                    runRight(-0.000001);
-                    Thread.sleep(100);
-                }
+
+            if (Math.abs(gyroError) <= 0.5){break;}
+
+            if (gyroError > 0){
+                runLeft(-0.000001); //the reason the motor values are switched
+                runRight(0.000001);
+                Thread.sleep(100);
+            }
+            else {
+                runLeft(0.000001);
+                runRight(-0.000001);
+                Thread.sleep(100);
+            }
             telemetryPass.addData("Gyro", gyro.getHeading());
+            telemetryPass.update();
 
         }
 
