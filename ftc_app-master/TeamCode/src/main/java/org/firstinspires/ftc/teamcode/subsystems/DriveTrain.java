@@ -260,7 +260,7 @@ public class DriveTrain {
     }
 
 
-    public void turnWithPID(int degrees, double timeout, double power, LinearOpMode opMode) {
+    public void turnWithPID(int degrees, double timeout, double power, LinearOpMode opMode) throws InterruptedException {
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         resetEncoders();
         gyro.reset();
@@ -270,10 +270,10 @@ public class DriveTrain {
         double rightPower = power;
         double leftPower = power;
         boolean reachedTarget = false;
-        boolean turnSide = false;
+        boolean turnRight = false;
 
         if (degrees > 0){
-            leftPower *= -1;
+            leftPower *= -1; //.93
         }
 
         else {
@@ -290,23 +290,36 @@ public class DriveTrain {
             telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+            telemetryPass.update();
+        }
+        runRight(0);
+        runLeft(0);
+
+        Thread.sleep(2000);
+
+        if (degrees - gyro.getHeading() > 0){
+            turnRight = true;
         }
 
-        if ((Math.abs(gyro.getHeading()) - degrees) > 0){
-            turnSide = true;
-        }
-
-        double turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnSide ? 1 : -1);
+        double turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnRight ? 1 : -1);
 
         while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
 
-            if ((Math.abs(gyro.getHeading()) - Math.abs(degrees)) <= 0.5) {
+            turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnRight ? 1 : -1);
+
+            if ((Math.abs(gyro.getHeading() - Math.abs(degrees))) <= 0.5) {
                 break;
             }
 
             runRight(turnPID/2);
             runLeft(turnPID/2);
+            telemetryPass.addData("Target Ticks", targetTicks);
+            telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
+            telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+            telemetryPass.addData("Gyro", gyro.getHeading());
+            telemetryPass.update();
         }
+
 
         runRight(0);
         runLeft(0);
@@ -314,9 +327,11 @@ public class DriveTrain {
         telemetryPass.addData("Target Ticks", targetTicks);
         telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
         telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+        telemetryPass.addData("Gyro", gyro.getHeading());
+        telemetryPass.update();
     }
 
-    /*public void turnUsingEncoders(int degrees, double timeout, double power, LinearOpMode opMode) throws InterruptedException {
+    public void turnWithoutPID(int degrees, double timeout, double power, LinearOpMode opMode) throws InterruptedException {
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         resetEncoders();
         gyro.reset();
@@ -325,10 +340,10 @@ public class DriveTrain {
         double rightPower = power;
         double leftPower = power;
         boolean reachedTarget = false;
-        double gyroError = 0;
+        double gyroError;
 
         if (degrees > 0){
-            leftPower *= -1;
+            leftPower *= -1; //.93
         }
 
         else {
@@ -345,33 +360,28 @@ public class DriveTrain {
             telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
+            telemetryPass.addData("Gyro", gyro.getHeading());
+            telemetryPass.update();
         }
+        runRight(0);
+        runLeft(0);
 
-        gyroError = Math.abs(gyro.getHeading()) - Math.abs(degrees);
+        Thread.sleep(2000);
 
-        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive() && Math.abs(Math.abs(gyro.getHeading()) - Math.abs(degrees)) > 2){
+        while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive() && Math.abs(gyro.getHeading() - degrees) > .5){
 
-            if (degrees > 0){
+            gyroError = degrees - gyro.getHeading();
                 if (gyroError > 0){
-                    runLeft(-0.000001);
+                    runLeft(-0.000001); //the reason the motor values are switched
+                    runRight(0.000001);
                     Thread.sleep(100);
                 }
                 else {
                     runLeft(0.000001);
-                    Thread.sleep(100);
-                }
-            }
-
-            else {
-                if (gyroError > 0){
                     runRight(-0.000001);
                     Thread.sleep(100);
                 }
-                else {
-                    runRight(0.000001);
-                    Thread.sleep(100);
-                }
-            }
+            telemetryPass.addData("Gyro", gyro.getHeading());
 
         }
 
@@ -381,7 +391,10 @@ public class DriveTrain {
         telemetryPass.addData("Target Ticks", targetTicks);
         telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
         telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
-    } */
+        telemetryPass.addData("Gyro", gyro.getHeading());
+
+        telemetryPass.update();
+    }
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();
