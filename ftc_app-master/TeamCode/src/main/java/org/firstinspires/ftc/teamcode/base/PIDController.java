@@ -28,13 +28,13 @@ public class PIDController {
 
     public double getError (double current, double target){
 
-        return Math.abs(current - target);
+        return Math.abs(target - current);
 
     }
 
     public double calculatePID(double current, double target){
 
-        error = current - target;
+        error = target - current;
         sumError += error;
         changeError = error - prevError;
 

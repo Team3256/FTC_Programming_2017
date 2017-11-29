@@ -7,8 +7,8 @@ package org.firstinspires.ftc.teamcode.base;
 public class Constants {
 
     public static final double WHEEL_DIAMETER = 4; //in inches (4.07) or 2.25
-    public static final double TICKS_PER_ROTATION = 240; //fill in correct value when given //239 ticks
-    public static final double ROBOT_TRACK = 15.65; //fill in correct value when given //15.5625
+    public static final double TICKS_PER_ROTATION = 400;//668; //fill in correct value when given //239 ticks
+    public static final double ROBOT_TRACK = 15.5; //fill in correct value when given //15.5625
     public static final double GEAR_RATIO = 1.0/1.73;//1.0/2.33 --- 1/1.795
 
     public static final double kP = 0.0;

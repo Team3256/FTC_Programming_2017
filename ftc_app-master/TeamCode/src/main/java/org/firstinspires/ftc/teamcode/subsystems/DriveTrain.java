@@ -27,7 +27,7 @@ import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
  */
 
 //Created by Team 2891, destroyed by Albert!!!
-    
+
 @TeleOp
 public class DriveTrain {
 
@@ -268,8 +268,8 @@ public class DriveTrain {
         resetEncoders();
         gyro.reset();
         double startTime = System.currentTimeMillis();
-        PIDController turnPIDController = new PIDController(0.00001, 0, 0);
-        double targetTicks = degreesToTicks(Constants.ROBOT_TRACK*degrees/Constants.WHEEL_DIAMETER);
+        PIDController turnPIDController = new PIDController(0.01, 0, 0);
+        double targetTicks = degreesToTicks(Constants.ROBOT_TRACK*degrees/(Constants.WHEEL_DIAMETER));
         double rightPower = power;
         double leftPower = power;
         boolean reachedTarget = false;
@@ -300,29 +300,33 @@ public class DriveTrain {
 
         Thread.sleep(2000);
 
-        if (degrees - gyro.getHeading() > 0){
+        if (degrees - gyro.getHeading() < 0){
             turnRight = true;
         }
 
-        double turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnRight ? 1 : -1);
+        double turnPID;
 
         while(System.currentTimeMillis() - startTime <= timeout*1000 && opMode.opModeIsActive()){
 
-            turnPID = turnPIDController.calculatePID(gyro.getHeading(), degrees) * (turnRight ? 1 : -1);
+            turnPID = turnPIDController.calculatePID(gyro.getHeading(), -degrees) * (turnRight ? 1 : -1);
 
-            if ((Math.abs(gyro.getHeading() - degrees)) <= 0.5) {
+            if ((Math.abs(gyro.getHeading() + degrees) <= 0.75)){
                 break;
             }
-
-            runRight(turnPID/2);
-            runLeft(turnPID/2);
+//Albert was here on 11/28/2017
+            runRight(turnPID);
+            runLeft(-turnPID);
             telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
             telemetryPass.addData("Gyro", gyro.getHeading());
+            telemetryPass.addData("TurnPID", turnPID);
+            telemetryPass.addData("Target", degrees);
+            telemetryPass.addData("Error", gyro.getHeading()+degrees);
+            telemetryPass.addData("TurnRight", turnRight);
             telemetryPass.update();
         }
-
+//Albert was dead due to HIV on 11/29/2017
 
         runRight(0);
         runLeft(0);
