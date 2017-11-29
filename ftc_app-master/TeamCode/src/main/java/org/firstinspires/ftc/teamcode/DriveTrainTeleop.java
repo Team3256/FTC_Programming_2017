@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Glyph;
 
 /**
  * Created by Team 3256 on 9/27/2017.
@@ -14,7 +16,7 @@ public class DriveTrainTeleop extends LinearOpMode {
 
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
-
+    private Glyph glyph = Glyph.getInstance();
 
 
     @Override
@@ -22,6 +24,7 @@ public class DriveTrainTeleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainTeleop.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
+        glyph.init(hardwareMap);
 
         float left, right;
 
@@ -31,6 +34,13 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
+            if (gamepad1.x){
+                glyph.clampIn();
+            }
+
+            else if (gamepad1.b){
+                glyph.clampOut();
+            }
 
             left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_x;
@@ -40,6 +50,7 @@ public class DriveTrainTeleop extends LinearOpMode {
             if(Math.abs(gamepad1.right_stick_x) < 0.15){
                 gamepad1.right_stick_x = 0;
             }
+
             telemetry.addData("Left", left);
             telemetry.addData("Right", right);
             driveTrain.arcadeDrive(left, right);

@@ -19,14 +19,14 @@ import static android.R.attr.left;
 import static android.R.attr.right;
 import static com.sun.tools.javac.jvm.ByteCodes.bool_and;
 import static com.sun.tools.javac.jvm.ByteCodes.error;
-import static org.firstinspires.ftc.teamcode.AutoTest.telemetryPass;
+import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
 
 
 /**
  * Created by Team 2891 on 9/25/2017.
  */
 
-//Created by Team 2891, destroyed by Albert!!!
+//Created by Team 2891
 
 @TeleOp
 public class DriveTrain {
