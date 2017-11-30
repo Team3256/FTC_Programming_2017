@@ -82,7 +82,7 @@ public class DriveTrain {
         //setPower(0);
 
         rampServoL = hardwareMap.servo.get("rampServoL");
-        rampServoR = hardwareMap.servo.get("rampServoL");
+        rampServoR = hardwareMap.servo.get("rampServoR");
 
     }
 

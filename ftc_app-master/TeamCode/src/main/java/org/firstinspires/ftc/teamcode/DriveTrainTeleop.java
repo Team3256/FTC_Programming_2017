@@ -16,7 +16,7 @@ public class DriveTrainTeleop extends LinearOpMode {
 
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
-    //private Glyph glyph = Glyph.getInstance();
+    private Glyph glyph = Glyph.getInstance();
 
 
     @Override
@@ -24,7 +24,8 @@ public class DriveTrainTeleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainTeleop.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
-        //glyph.init(hardwareMap);
+        glyph.init(hardwareMap);
+        glyph.resetEncoders();
 
         float left, right;
 
@@ -34,20 +35,24 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            /*if (gamepad1.x){
+            if (gamepad1.right_bumper){
                 glyph.clampIn();
             }
 
             else if (gamepad1.b){
                 glyph.clampOut();
-            } */
-
-            if (gamepad1.x){
-                driveTrain.driveRampDown();
             }
 
-            else if (gamepad1.b){
-                driveTrain.driveRampUp();
+            if (gamepad1.x){
+                glyph.elevatorHalfUp(this);
+            }
+
+            else if (gamepad1.a){
+                glyph.elevatorDown(this);
+            }
+
+            else if (gamepad1.y){
+                glyph.elevatorFullUp(this);
             }
 
             left = -gamepad1.left_stick_y;
@@ -59,12 +64,12 @@ public class DriveTrainTeleop extends LinearOpMode {
                 gamepad1.right_stick_x = 0;
             }
 
-            telemetry.addData("Left", left);
-            telemetry.addData("Right", right);
+            //telemetry.addData("Left", left);
+            //telemetry.addData("Right", right);
             driveTrain.arcadeDrive(left, right);
-            telemetry.addData("Left Encoder Value", driveTrain.getLeftEncoder());
-            telemetry.addData("Right Encoder Value", driveTrain.getRightEncoder());
-            telemetry.update();
+            //telemetry.addData("Left Encoder Value", driveTrain.getLeftEncoder());
+            //telemetry.addData("Right Encoder Value", driveTrain.getRightEncoder());*/
+            //telemetry.update();
 
 
         }
