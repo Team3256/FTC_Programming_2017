@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.android.dx.io.instructions.ThreeRegisterDecodedInstruction;
@@ -32,6 +33,8 @@ import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
 public class DriveTrain {
 
     private DcMotor leftFront, rightFront, leftBack, rightBack;
+
+    private Servo rampServoL, rampServoR;
 
     private static DriveTrain driveTrain = new DriveTrain();
 
@@ -77,6 +80,9 @@ public class DriveTrain {
         resetEncoders();
 
         //setPower(0);
+
+        rampServoL = hardwareMap.servo.get("rampServoL");
+        rampServoR = hardwareMap.servo.get("rampServoL");
 
     }
 
@@ -210,8 +216,8 @@ public class DriveTrain {
         if (!forward){flipDirection();}
         int ticks = (int)inchesToTicks(inches);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0.0006); //distance PID
-        PIDController gyroPIDController = new PIDController(0.00000000025, 0, 0.00005);
+        PIDController distancePIDController = new PIDController(0.001, 0.0 , 0); //distance PID
+        PIDController gyroPIDController = new PIDController(0.005, 0, 0);
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
@@ -229,8 +235,8 @@ public class DriveTrain {
                 break;
             }
 
-            runRight(distancePID + gyroPID);
-            runLeft(distancePID - gyroPID);
+            runRight(distancePID - gyroPID);
+            runLeft(distancePID + gyroPID);
 
             telemetryPass.addData("Error",error);
             telemetryPass.addData("Distance PID: ", distancePID);
@@ -258,7 +264,7 @@ public class DriveTrain {
         telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));
         telemetryPass.update();
 
-        Thread.sleep(20000);
+        Thread.sleep(20);
 
     }
 
@@ -298,7 +304,7 @@ public class DriveTrain {
         runRight(0);
         runLeft(0);
 
-        Thread.sleep(2000);
+        Thread.sleep(20);
 
         if (degrees - gyro.getHeading() < 0){
             turnRight = true;
@@ -313,7 +319,6 @@ public class DriveTrain {
             if ((Math.abs(gyro.getHeading() + degrees) <= 0.75)){
                 break;
             }
-//Albert was here on 11/28/2017
             runRight(turnPID);
             runLeft(-turnPID);
             telemetryPass.addData("Target Ticks", targetTicks);
@@ -326,8 +331,6 @@ public class DriveTrain {
             telemetryPass.addData("TurnRight", turnRight);
             telemetryPass.update();
         }
-//Albert was dead due to HIV on 11/29/2017
-
         runRight(0);
         runLeft(0);
 
@@ -405,6 +408,16 @@ public class DriveTrain {
         telemetryPass.addData("Gyro", gyro.getHeading());
 
         telemetryPass.update();
+    }
+
+    public void driveRampDown () throws InterruptedException {
+        rampServoL.setPosition(0);
+        rampServoR.setPosition(0);
+    }
+
+    public void driveRampUp () throws InterruptedException {
+        rampServoL.setPosition(1);
+        rampServoR.setPosition(1);
     }
 
     public boolean isBusy (){

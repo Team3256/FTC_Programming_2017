@@ -16,7 +16,7 @@ public class DriveTrainTeleop extends LinearOpMode {
 
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
-    private Glyph glyph = Glyph.getInstance();
+    //private Glyph glyph = Glyph.getInstance();
 
 
     @Override
@@ -24,7 +24,7 @@ public class DriveTrainTeleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainTeleop.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
-        glyph.init(hardwareMap);
+        //glyph.init(hardwareMap);
 
         float left, right;
 
@@ -34,12 +34,20 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            if (gamepad1.x){
+            /*if (gamepad1.x){
                 glyph.clampIn();
             }
 
             else if (gamepad1.b){
                 glyph.clampOut();
+            } */
+
+            if (gamepad1.x){
+                driveTrain.driveRampDown();
+            }
+
+            else if (gamepad1.b){
+                driveTrain.driveRampUp();
             }
 
             left = -gamepad1.left_stick_y;
