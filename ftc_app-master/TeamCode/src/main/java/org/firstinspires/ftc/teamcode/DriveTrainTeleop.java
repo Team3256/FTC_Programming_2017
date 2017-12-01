@@ -17,6 +17,7 @@ public class DriveTrainTeleop extends LinearOpMode {
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
     private Glyph glyph = Glyph.getInstance();
+    private boolean running = false;
 
 
     @Override
@@ -35,24 +36,51 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            if (gamepad1.right_bumper){
-                glyph.clampIn();
-            }
-
-            else if (gamepad1.b){
-                glyph.clampOut();
+            if (gamepad1.left_bumper){
+                if (running == false) {
+                    glyph.clampToggle();
+                    running = true;
+                } else {
+                    running = false;
+                }
             }
 
             if (gamepad1.x){
                 glyph.elevatorHalfUp(this);
             }
-
             else if (gamepad1.a){
                 glyph.elevatorDown(this);
             }
-
             else if (gamepad1.y){
                 glyph.elevatorFullUp(this);
+            }
+
+            /*
+            if (gamepad2.left_bumper) {
+                glyph.intake();
+            }
+            else if (gamepad2.right_bumper){
+                glyph.outtake();
+            }
+
+            else {
+                glyph.zeroPower();
+            }
+            */
+
+            if (gamepad1.dpad_up){
+                driveTrain.driveRampUp();
+            }
+            else if (gamepad1.dpad_down) {
+                driveTrain.driveRampDown();
+            }
+
+            if (Math.abs(gamepad2.left_stick_y) > 0.15){
+                glyph.manualElevator(gamepad2.left_stick_y);
+            }
+
+            if (gamepad2.start){
+                glyph.resetEncoders();
             }
 
             left = -gamepad1.left_stick_y;

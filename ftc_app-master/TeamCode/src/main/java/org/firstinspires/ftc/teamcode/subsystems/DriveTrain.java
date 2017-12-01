@@ -141,10 +141,6 @@ public class DriveTrain {
         runLeft(left);
         runRight(right);
 
-        telemetryPass.addData("Right Front", rightFront.getCurrentPosition());
-        telemetryPass.addData("Right Back", rightBack.getCurrentPosition());
-        telemetryPass.addData("Left Front", leftFront.getCurrentPosition());
-        telemetryPass.addData("Left Back", leftBack.getCurrentPosition());
     }
 
     public static DriveTrain getInstance() {
@@ -416,8 +412,8 @@ public class DriveTrain {
     }
 
     public void driveRampUp () throws InterruptedException {
-        rampServoL.setPosition(1);
-        rampServoR.setPosition(1);
+        rampServoL.setPosition(0.75);
+        rampServoR.setPosition(0.75);
     }
 
     public boolean isBusy (){
