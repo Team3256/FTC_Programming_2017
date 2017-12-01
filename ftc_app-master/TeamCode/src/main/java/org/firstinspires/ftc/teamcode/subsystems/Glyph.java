@@ -64,15 +64,11 @@ public class Glyph{
     public void clampIn(){
         glyphClampL.setPosition(0);
         glyphClampR.setPosition(1);
-        telemetryPass.addData("clamping","in");
-        telemetryPass.update();
     }
 
     public void clampOut(){
         glyphClampL.setPosition(1);
         glyphClampR.setPosition(0);
-        telemetryPass.addData("clamping","out");
-        telemetryPass.update();
     }
     /*
 
@@ -99,44 +95,34 @@ public class Glyph{
         glyphElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void manualElevator(double power){
-        glyphElevator.setPower(power);
-    }
+    //public void manualElevator(double power){
+        //glyphElevator.setPower(power);
+    //}
 
     public double getElevatorEncoder(){
         return glyphElevator.getCurrentPosition();
     }
 
     public void elevatorFullUp(LinearOpMode opMode) {
-        telemetryPass.addData("position",glyphElevator.getCurrentPosition());
-        while(glyphElevator.getCurrentPosition() < 1496) {
-            telemetryPass.addData("run up","true");
-            telemetryPass.update();
-            glyphElevator.setPower(.5);
+        while(glyphElevator.getCurrentPosition() < 1700) {
+            glyphElevator.setPower(0.8);
         }
         glyphElevator.setPower(0);
     }
 
     public void elevatorHalfUp(LinearOpMode opMode) {
-        telemetryPass.addData("position",glyphElevator.getCurrentPosition());
         double direction = -.3;
-        if(glyphElevator.getCurrentPosition() < 1546/2) {
+        if(glyphElevator.getCurrentPosition() < 1700/2) {
             direction = .5;
         }
-        while(Math.abs(glyphElevator.getCurrentPosition()-1546/2) > 0) {
-            telemetryPass.addData("run half up","true");
-            telemetryPass.update();
+        while(Math.abs(glyphElevator.getCurrentPosition()-1700/2) > 0) {
             glyphElevator.setPower(direction);
         }
         glyphElevator.setPower(0);
     }
 
     public void elevatorDown(LinearOpMode opMode) {
-        telemetryPass.addData("position",glyphElevator.getCurrentPosition());
-        telemetryPass.update();
         while(glyphElevator.getCurrentPosition() > 50) {
-            telemetryPass.addData("run down","true");
-            telemetryPass.update();
             glyphElevator.setPower(-.3);
         }
         glyphElevator.setPower(0);

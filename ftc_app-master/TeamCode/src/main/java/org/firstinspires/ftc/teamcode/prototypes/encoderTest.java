@@ -15,18 +15,20 @@ import org.firstinspires.ftc.teamcode.subsystems.Glyph;
 
 public class encoderTest extends LinearOpMode {
 
-    private DriveTrain driveTrain = DriveTrain.getInstance();
+    //private DriveTrain driveTrain = DriveTrain.getInstance();
     private Glyph glyph = Glyph.getInstance();
-    public static Telemetry telemetryPass;
+    //public static Telemetry telemetryPass;
 
     @Override
 
     public void runOpMode() throws InterruptedException {
 
-        encoderTest.telemetryPass = telemetry;
+        //encoderTest.telemetryPass = telemetry;
 
-        driveTrain.init(hardwareMap);
+        //driveTrain.init(hardwareMap);
         glyph.init(hardwareMap);
+
+        glyph.resetEncoders();
 
         super.waitForStart();
 
@@ -37,7 +39,10 @@ public class encoderTest extends LinearOpMode {
             telemetryPass.addData("Left Encoder", driveTrain.getLeftEncoder());
             telemetryPass.addData("Inches", Double.toString(driveTrain.ticksToInches(driveTrain.getAverageEncoderValue())));
             */
-            telemetryPass.update();
+
+            telemetry.addData("Encoder", glyph.getElevatorEncoder());
+            //telemetryPass.update();
+            telemetry.update();
         }
 
     }
