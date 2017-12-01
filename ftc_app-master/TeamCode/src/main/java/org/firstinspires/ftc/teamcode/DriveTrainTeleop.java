@@ -36,13 +36,33 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            if(gamepad1.x) {
+            if(gamepad1.left_bumper) {
                 if(!running) {
                     glyph.clampToggle();
                 }
                 running = true;
             } else {
                 running = false;
+            }
+
+            /*if (gamepad1.a){
+                glyph.elevatorDown();
+            }
+
+            else if (gamepad1.x){
+                glyph.elevatorHalfUp();
+            } */
+
+            if (gamepad1.x){
+                glyph.elevatorHalfUp(this);
+            }
+
+            else if (gamepad1.a){
+                glyph.elevatorDown(this);
+            }
+
+            else if (gamepad1.y){
+                glyph.elevatorFullUp(this);
             }
 
             left = -gamepad1.left_stick_y;
