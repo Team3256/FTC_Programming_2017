@@ -111,83 +111,52 @@ public class Glyph{
     public void elevatorFullUp(LinearOpMode opMode) {
         telemetryPass.addData("fullup","running");
         telemetryPass.update();
-        /*while(glyphElevator.getCurrentPosition() < 1496) {
+        if(glyphElevator.getCurrentPosition() < 1496) {
             glyphElevator.setPower(.5);
         }
-        glyphElevator.setPower(0);*/
+
+        else {
+            glyph.stopElevator(opMode);
+        }
     }
     public void elevatorHalfUp(LinearOpMode opMode) {
         telemetryPass.addData("halfup","running");
-        telemetryPass.update();/*
+        telemetryPass.update();
         double direction = -.3;
         if(glyphElevator.getCurrentPosition() < 1546/2) {
             direction = .5;
         }
-        while(Math.abs(glyphElevator.getCurrentPosition()-1546/2) > 0) {
+
+        else {
+            glyph.stopElevator(opMode);
+        }
+
+        if(Math.abs(glyphElevator.getCurrentPosition()-1546/2) > 0) {
             glyphElevator.setPower(direction);
         }
-        glyphElevator.setPower(0);*/
+
+        else {
+            glyph.stopElevator(opMode);
+        }
     }
     public void elevatorDown(LinearOpMode opMode) {
 
         telemetryPass.addData("down","running");
         telemetryPass.update();
-        /*while(glyphElevator.getCurrentPosition() > 50) {
+        if(glyphElevator.getCurrentPosition() > 50) {
             glyphElevator.setPower(-.3);
         }
-        glyphElevator.setPower(0);*/
+        else {
+            glyph.stopElevator(opMode);
+        }
     }
 
-    /*public void elevatorFullUp() {
-        while(glyphElevator.getCurrentPosition() < 700) {
-            glyphElevator.setPower(0.8);
-        }
+    public void stopElevator(LinearOpMode opMode) {
         glyphElevator.setPower(0);
+
     }
 
-    public void justUp(){
-        glyphElevator.setPower(1);
-    }
 
-    public void elevatorHalfUp() {
-        double direction = -.3;
-        if(glyphElevator.getCurrentPosition() < 1700/2) {
-            direction = .5;
-        }
-        while(Math.abs(glyphElevator.getCurrentPosition()-1700/2) > 0) {
-            glyphElevator.setPower(direction);
-        }
-        glyphElevator.setPower(0);
-    }
-
-    public void elevatorDown() {
-        while(glyphElevator.getCurrentPosition() > 50) {
-            glyphElevator.setPower(-.3);
-        }
-        glyphElevator.setPower(0);
-    } */
-
-    /*public void elevatorFullUp(LinearOpMode opMode) {
-        while(getElevatorEncoder() < 1496) {
-            glyphElevator.setPower(.5);
-        }
-        glyphElevator.setPower(0);
-    }
-
-    public void elevatorHalfUp(LinearOpMode opMode) {
-        double direction = (getElevatorEncoder() > 773) ? -.3 : .5;
-        while(Math.abs(getElevatorEncoder()-773) > 0) {
-            glyphElevator.setPower(direction);
-        }
-        glyphElevator.setPower(0);
-    }
-
-    public void elevatorDown(LinearOpMode opMode) {
-        while(getElevatorEncoder() > 50) {
-            glyphElevator.setPower(-.3);
-        }
-        glyphElevator.setPower(0);
-    } */
 
     //1546
     /*public String displayClampL(){

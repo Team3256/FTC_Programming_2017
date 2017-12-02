@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Glyph;
+import org.firstinspires.ftc.teamcode.subsystems.Jewel;
+
+import static android.R.attr.y;
 
 /**
  * Created by Team 3256 on 9/27/2017.
@@ -17,7 +20,12 @@ public class DriveTrainTeleop extends LinearOpMode {
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
     private Glyph glyph = Glyph.getInstance();
-    private boolean running = false;
+    private Jewel jewel = Jewel.getInstance();
+    private boolean runningClamp = false;
+    private enum ElevatorState {
+        DOWN, HALF, UP
+    }
+    private ElevatorState elevatorState;
 
 
     @Override
@@ -26,10 +34,13 @@ public class DriveTrainTeleop extends LinearOpMode {
         DriveTrainTeleop.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
         glyph.init(hardwareMap);
+        jewel.init(hardwareMap);
+        jewel.resetArm();
         glyph.resetEncoders();
 
         float left, right;
 
+        elevatorState = ElevatorState.DOWN;
         super.waitForStart();
 
         //Tank Drive
@@ -37,32 +48,53 @@ public class DriveTrainTeleop extends LinearOpMode {
         while (opModeIsActive()){
 
             if(gamepad1.left_bumper) {
-                if(!running) {
+                if(!runningClamp) {
                     glyph.clampToggle();
                 }
-                running = true;
+                runningClamp = true;
             } else {
-                running = false;
+                runningClamp = false;
             }
 
-            /*if (gamepad1.a){
-                glyph.elevatorDown();
+            if (gamepad1.a){
+                elevatorState = ElevatorState.DOWN;
             }
 
             else if (gamepad1.x){
-                glyph.elevatorHalfUp();
-            } */
-
-            if (gamepad1.x){
-                glyph.elevatorHalfUp(this);
+                elevatorState = ElevatorState.HALF;
             }
 
-            else if (gamepad1.a){
+            else if (gamepad1.y) {
+                elevatorState = ElevatorState.UP;
+            }
+
+            if (elevatorState == ElevatorState.DOWN){
                 glyph.elevatorDown(this);
             }
 
-            else if (gamepad1.y){
+            else if (elevatorState == ElevatorState.HALF){
+                glyph.elevatorHalfUp(this);
+            }
+
+            else if (elevatorState == ElevatorState.UP){
                 glyph.elevatorFullUp(this);
+            }
+
+            if (gamepad1.b){
+                jewel.setArm();
+            }
+
+            if (gamepad1.dpad_up){
+                jewel.jewelUp();
+            }
+
+            if (gamepad1.dpad_down){
+                jewel.jewelDown();
+            }
+
+            if (gamepad1.start){
+                telemetry.addData("Blue", jewel.isBlue());
+                telemetry.update();
             }
 
             left = -gamepad1.left_stick_y;

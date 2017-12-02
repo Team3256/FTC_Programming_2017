@@ -44,7 +44,6 @@ public class GamepadJewelPrototype extends OpMode {
         }
 
         position = Range.clip(position, 0, 1);
-
         jewelArm.setPosition(position);
 
         if (gamepad1.right_bumper) {
