@@ -35,22 +35,21 @@ public class Glyph{
 
         //Initializing motors and servos
 
-        //glyphIntake = hardwareMap.dcMotor.get("glyphIntake");
         glyphElevator = hardwareMap.dcMotor.get("glyphElevator");
         glyphElevator.setDirection(DcMotorSimple.Direction.FORWARD);
         glyphElevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //glyphIntakeL = hardwareMap.dcMotor.get("glyphIntakeL");
-        //glyphIntakeR = hardwareMap.dcMotor.get("glyphIntakeR");
+        glyphIntakeL = hardwareMap.dcMotor.get("glyphIntakeL");
+        glyphIntakeR = hardwareMap.dcMotor.get("glyphIntakeR");
 
         glyphClampL = hardwareMap.servo.get("glyphClampL");
         glyphClampR = hardwareMap.servo.get("glyphClampR");
-        //glyphPivotL = hardwareMap.servo.get("glyphPivotL");
-        //glyphPivotR = hardwareMap.servo.get("glyphPivotR");
+        glyphPivotL = hardwareMap.servo.get("glyphPivotL");
+        glyphPivotR = hardwareMap.servo.get("glyphPivotR");
 
         glyphClampL.setPosition(glyphClampL.getPosition());
         glyphClampR.setPosition(glyphClampR.getPosition());
-        //glyphPivotL.setPosition(glyphClampL.getPosition());
-        //glyphPivotR.setPosition(glyphClampR.getPosition());
+        glyphPivotL.setPosition(glyphClampL.getPosition());
+        glyphPivotR.setPosition(glyphClampR.getPosition());
     }
 
     public void clampToggle(){
@@ -76,20 +75,20 @@ public class Glyph{
 
 
     public void intake (){
-        glyphIntakeL.setPower(0.5);
-        glyphIntakeR.setPower(-0.5);
-        glyphPivotL.setPosition(0.7);
-        glyphPivotR.setPosition(0.35);
+        glyphIntakeL.setPower(-0.3);
+        glyphIntakeR.setPower(0.3);
+        glyphPivotL.setPosition(0.9);
+        glyphPivotR.setPosition(0.25);
     }
     public void outtake (){
-        glyphIntakeL.setPower(-0.5);
-        glyphIntakeR.setPower(0.5);
-        glyphPivotL.setPosition(0.7);
-        glyphPivotR.setPosition(0.35);
+        glyphIntakeL.setPower(0.37);
+        glyphIntakeR.setPower(-0.3);
+        glyphPivotL.setPosition(0.9);
+        glyphPivotR.setPosition(0.25);
     }
     public void zeroPower (){
-        glyphPivotL.setPosition(0.6);
-        glyphPivotR.setPosition(0.55);
+        glyphPivotL.setPosition(0.71);
+        glyphPivotR.setPosition(0.45);
         glyphIntakeL.setPower(0);
         glyphIntakeR.setPower(0);
     }
@@ -104,6 +103,7 @@ public class Glyph{
     public void resetEncoders() {
 
         glyphElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        glyphElevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     //public void manualElevator(double power){
@@ -115,23 +115,46 @@ public class Glyph{
         return glyphElevator.getCurrentPosition();
     }
 
-    public void elevatorFullUp(LinearOpMode opMode) {
+    public void goUp() {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        glyphElevator.setPower(-.3);
+
+    }
+
+    public void goDown() {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        glyphElevator.setPower(.3);
+
+    }
+
+    public void elevatorFullUp( ) {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        glyphElevator.setTargetPosition(-10);
+        glyphElevator.setPower(-0.2);
+        /*
         telemetryPass.addData("fullup","running");
         telemetryPass.update();
         if(glyphElevator.getCurrentPosition() > -1496) {
-            glyphElevator.setPower(.7);
+            glyphElevator.setPower(.5);
         }
 
         else {
             glyph.stopElevator(opMode);
         }
+        */
     }
-    public void elevatorHalfUp(LinearOpMode opMode) {
-        telemetryPass.addData("halfup","running");
+    public void elevatorHalfUp() {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        glyphElevator.setTargetPosition(-1496/2);
+        glyphElevator.setPower(-0.2);
+        /*telemetryPass.addData("halfup","running");
         telemetryPass.update();
-        double direction = -.5;
+        double direction = -.3;
         if(glyphElevator.getCurrentPosition() > -1546/2) {
-            direction = .7;
+            direction = .5;
         }
 
         else {
@@ -145,21 +168,28 @@ public class Glyph{
         else {
             glyph.stopElevator(opMode);
         }
+        */
     }
-    public void elevatorDown(LinearOpMode opMode) {
+    public void elevatorDown( ) {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        glyphElevator.setTargetPosition(-1496);
+        glyphElevator.setPower(-0.2);
 
+        /*
         telemetryPass.addData("down","running");
         telemetryPass.update();
         if(glyphElevator.getCurrentPosition() <  -50) {
-            glyphElevator.setPower(-.5);
+            glyphElevator.setPower(-.3);
         }
         else {
             glyph.stopElevator(opMode);
-        }
+        }*/
     }
 
-    public void stopElevator(LinearOpMode opMode) {
+    public void stopElevator( ) {
+        glyphElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         glyphElevator.setPower(0);
+
     }
 
 

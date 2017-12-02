@@ -36,7 +36,7 @@ public class DriveTrainTeleop extends LinearOpMode {
         driveTrain.init(hardwareMap);
         glyph.init(hardwareMap);
         jewel.init(hardwareMap);
-        jewel.resetArm();
+        //jewel.resetArm();
         glyph.resetEncoders();
 
         float left, right;
@@ -58,30 +58,38 @@ public class DriveTrainTeleop extends LinearOpMode {
             }
 
             if (gamepad2.a){
-                elevatorState = ElevatorState.DOWN;
+                //elevatorState = ElevatorState.DOWN;
+                glyph.goUp();
             }
 
+            /*
             else if (gamepad2.x){
-                elevatorState = ElevatorState.HALF;
-            }
+                //elevatorState = ElevatorState.HALF;
+            }*/
 
             else if (gamepad2.y) {
-                elevatorState = ElevatorState.UP;
+                glyph.goDown();
+                //elevatorState = ElevatorState.UP;
             }
 
+            else {
+                glyph.stopElevator();
+            }
+
+            /*
             if (elevatorState == ElevatorState.DOWN){
-                glyph.elevatorDown(this);
+                glyph.elevatorDown();
             }
 
             else if (elevatorState == ElevatorState.HALF){
-                glyph.elevatorHalfUp(this);
+                glyph.elevatorHalfUp();
             }
 
             else if (elevatorState == ElevatorState.UP){
-                glyph.elevatorFullUp(this);
-            }
+                glyph.elevatorFullUp();
+            }*/
 
-            if (gamepad2.b){
+            /*if (gamepad2.b){
                 jewel.setArm();
             }
 
@@ -96,23 +104,27 @@ public class DriveTrainTeleop extends LinearOpMode {
             if (gamepad2.start){
                 telemetry.addData("Blue", jewel.isBlue());
                 telemetry.update();
-            }
+            } */
 
             if (gamepad1.right_bumper){
                 glyph.intake();
             }
 
-            if (gamepad1.left_bumper){
+            else if (gamepad1.left_bumper){
                 glyph.outtake();
             }
 
-            if (gamepad1.x){
+            else if (gamepad1.x){
                 glyph.intakeOut();
             }
 
-            if (gamepad1.b){
-                driveTrain.driveRampUp();
+            else {
+                glyph.zeroPower();
             }
+
+           /* if (gamepad1.b){
+                driveTrain.driveRampUp();
+            } */
 
             left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_x;

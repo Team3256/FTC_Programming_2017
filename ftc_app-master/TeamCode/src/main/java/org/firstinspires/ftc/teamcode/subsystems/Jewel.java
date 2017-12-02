@@ -11,30 +11,30 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 public class Jewel {
-    Servo jewelArm;
+    //Servo jewelArm;
     double position = 0;
-    ColorSensor colorSensor;
-    DistanceSensor sensorColorRange;
+    //ColorSensor colorSensor;
+    //DistanceSensor sensorColorRange;
 
     private static Jewel jewel = new Jewel();
 
     public void init(HardwareMap hardwareMap) {
 
-        jewelArm = hardwareMap.servo.get("jewelArm");
-        jewelArm.setPosition(jewelArm.getPosition());
-        sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
+        /*jewelArm = hardwareMap.servo.get("jewelArm");
+        jewelArm.setPosition(jewelArm.getPosition());*/
+       // sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+        //colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
     }
 
     public static Jewel getInstance(){
         return jewel;
     }
 
-    public void resetArm(){
-        jewelArm.setPosition(jewelArm.getPosition());
-    }
+    //public void resetArm(){
+        //jewelArm.setPosition(jewelArm.getPosition());
+   // }
 
-    public void setArm(){
+    /*public void setArm(){
         position = 0.5;
         jewelArm.setPosition(position);
     }
@@ -58,5 +58,5 @@ public class Jewel {
             return true;
         }
         return true;
-    }
+    } */
 }

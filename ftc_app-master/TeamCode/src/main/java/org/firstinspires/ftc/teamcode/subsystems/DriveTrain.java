@@ -81,7 +81,7 @@ public class DriveTrain {
 
         //setPower(0);
 
-        rampServo = hardwareMap.servo.get("rampServo");
+        //rampServo = hardwareMap.servo.get("rampServo");
 
     }
 
@@ -405,13 +405,13 @@ public class DriveTrain {
         telemetryPass.update();
     }
 
-    public void driveRampDown () throws InterruptedException {
+    /*public void driveRampDown () throws InterruptedException {
         rampServo.setPosition(0);
     }
 
     public void driveRampUp () throws InterruptedException {
         rampServo.setPosition(0.75);
-    }
+    } */
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();

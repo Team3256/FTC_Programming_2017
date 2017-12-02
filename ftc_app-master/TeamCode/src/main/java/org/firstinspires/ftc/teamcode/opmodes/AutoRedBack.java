@@ -24,6 +24,7 @@ public class AutoRedBack extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+    /*
         jewel.init(hardwareMap);
         glyph.init(hardwareMap);
         driveTrain.init(hardwareMap);
@@ -44,17 +45,13 @@ public class AutoRedBack extends LinearOpMode {
 
         //jewel.jewelDown();
 
-        while (pictograph == null) {
+        /*while (pictograph == null) {
             pictograph = vuforiaWrapper.getPictograph().toLowerCase();
         }
 
         telemetry.addData("pictograph",pictograph);
         telemetry.update();
+        */
 
-        /*
-
-
-
-         */
     }
-}
+
