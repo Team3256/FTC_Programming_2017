@@ -47,7 +47,7 @@ public class DriveTrainTeleop extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            if(gamepad1.left_bumper) {
+            if(gamepad2.left_bumper) {
                 if(!runningClamp) {
                     glyph.clampToggle();
                 }
@@ -56,15 +56,15 @@ public class DriveTrainTeleop extends LinearOpMode {
                 runningClamp = false;
             }
 
-            if (gamepad1.a){
+            if (gamepad2.a){
                 elevatorState = ElevatorState.DOWN;
             }
 
-            else if (gamepad1.x){
+            else if (gamepad2.x){
                 elevatorState = ElevatorState.HALF;
             }
 
-            else if (gamepad1.y) {
+            else if (gamepad2.y) {
                 elevatorState = ElevatorState.UP;
             }
 
@@ -80,21 +80,33 @@ public class DriveTrainTeleop extends LinearOpMode {
                 glyph.elevatorFullUp(this);
             }
 
-            if (gamepad1.b){
+            if (gamepad2.b){
                 jewel.setArm();
             }
 
-            if (gamepad1.dpad_up){
+            if (gamepad2.dpad_up){
                 jewel.jewelUp();
             }
 
-            if (gamepad1.dpad_down){
+            if (gamepad2.dpad_down){
                 jewel.jewelDown();
             }
 
-            if (gamepad1.start){
+            if (gamepad2.start){
                 telemetry.addData("Blue", jewel.isBlue());
                 telemetry.update();
+            }
+
+            if (gamepad1.right_bumper){
+                glyph.intake();
+            }
+
+            if (gamepad1.left_bumper){
+                glyph.outtake();
+            }
+
+            if (gamepad1.x){
+                glyph.intakeOut();
             }
 
             left = -gamepad1.left_stick_y;

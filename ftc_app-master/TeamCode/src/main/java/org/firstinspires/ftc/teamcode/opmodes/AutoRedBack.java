@@ -35,11 +35,11 @@ public class AutoRedBack extends LinearOpMode {
         //jewel.jewelUp();
 
         if(jewel.isBlue()) {
-            telemetry.addData("iS","bLue");
+            telemetry.addData("is","blue");
             //driveTrain.driveToDistance(2, false, 1000, this);
         } else {
-            telemetry.addData("iS","rEd");
-            //driveTrain.driveToDistance(2, true, 1000, this);
+            telemetry.addData("is","red");
+            /*driveTrain.driveToDistance(2, true, 1000, this);*/
         }
 
         //jewel.jewelDown();

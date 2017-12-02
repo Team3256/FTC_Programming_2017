@@ -14,6 +14,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Jewel;
 @Autonomous(name = "Auto Blue Back")
 public class AutoBlueBack extends LinearOpMode {
 
+    private Jewel jewel = Jewel.getInstance();
+    private Glyph glyph = Glyph.getInstance();
+    private DriveTrain driveTrain = DriveTrain.getInstance();
+
+    private String pictograph;
 
     @Override
     public void runOpMode() throws InterruptedException {

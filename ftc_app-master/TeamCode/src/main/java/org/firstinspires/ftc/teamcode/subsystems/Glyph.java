@@ -73,26 +73,33 @@ public class Glyph{
         glyphClampL.setPosition(1);
         glyphClampR.setPosition(0);
     }
-    /*
+
 
     public void intake (){
         glyphIntakeL.setPower(0.5);
         glyphIntakeR.setPower(-0.5);
-        //glyphPivotL.setPosition();
-        //glyphPivotR.setPosition();
+        glyphPivotL.setPosition(0.7);
+        glyphPivotR.setPosition(0.35);
     }
     public void outtake (){
         glyphIntakeL.setPower(-0.5);
         glyphIntakeR.setPower(0.5);
-        //glyphPivotL.setPosition();
-        //glyphPivotR.setPosition();
+        glyphPivotL.setPosition(0.7);
+        glyphPivotR.setPosition(0.35);
     }
     public void zeroPower (){
-        //glyphPivotL.setPosition();
-        //glyphPivotR.setPosition();
+        glyphPivotL.setPosition(0.6);
+        glyphPivotR.setPosition(0.55);
         glyphIntakeL.setPower(0);
         glyphIntakeR.setPower(0);
-    }*/
+    }
+
+    public void intakeOut(){
+        glyphPivotR.setPosition(1);
+        glyphPivotL.setPosition(0);
+        glyphIntakeR.setPower(0);
+        glyphIntakeL.setPower(0);
+    }
 
     public void resetEncoders() {
 
@@ -153,7 +160,6 @@ public class Glyph{
 
     public void stopElevator(LinearOpMode opMode) {
         glyphElevator.setPower(0);
-
     }
 
 
