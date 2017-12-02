@@ -20,7 +20,7 @@ public class Jewel {
 
     public void init(HardwareMap hardwareMap) {
 
-        jewelArm = hardwareMap.servo.get("jewel_arm");
+        jewelArm = hardwareMap.servo.get("jewelArm");
         jewelArm.setPosition(jewelArm.getPosition());
         sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
         colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
