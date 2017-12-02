@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Glyph;
 import org.firstinspires.ftc.teamcode.subsystems.Jewel;
 import org.firstinspires.ftc.teamcode.subsystems.VuforiaWrapper;
 
+import static android.R.attr.left;
+
 /**
  * Created by Team 3256 on 11/30/2017.
  */
@@ -19,12 +21,13 @@ public class AutoRedBack extends LinearOpMode {
     private Jewel jewel = Jewel.getInstance();
     private Glyph glyph = Glyph.getInstance();
     private DriveTrain driveTrain = DriveTrain.getInstance();
+    private int counter = 0;
+    private int random = 0;
 
     private String pictograph;
 
     @Override
     public void runOpMode() throws InterruptedException {
-    /*
         jewel.init(hardwareMap);
         glyph.init(hardwareMap);
         driveTrain.init(hardwareMap);
@@ -33,25 +36,67 @@ public class AutoRedBack extends LinearOpMode {
 
         waitForStart();
 
-        //jewel.jewelUp();
+        glyph.clampIn();
+        jewel.setArmDown();
 
-        if(jewel.isBlue()) {
-            telemetry.addData("is","blue");
-            //driveTrain.driveToDistance(2, false, 1000, this);
+        if (jewel.isBlue()) {
+            telemetry.addData("is", "blue");
+            driveTrain.driveToDistance(3.5, false, 5, this);
+            jewel.setArmUp();
+            driveTrain.driveToDistance(9, true, 7, this);
+            while (pictograph == null && counter <= 100) {
+                pictograph = vuforiaWrapper.getPictograph().toLowerCase();
+                Thread.sleep(10);
+                counter ++;
+            }
         } else {
-            telemetry.addData("is","red");
-            /*driveTrain.driveToDistance(2, true, 1000, this);*/
+            telemetry.addData("is", "red");
+            driveTrain.driveToDistance(5.5, true, 5, this);
+            while (pictograph == null && counter <= 100) {
+                pictograph = vuforiaWrapper.getPictograph().toLowerCase();
+                Thread.sleep(10);
+                counter ++;
+            }
+            jewel.setArmUp();
         }
 
-        //jewel.jewelDown();
+        driveTrain.driveToDistance(19.5, true, 10, this);
 
-        /*while (pictograph == null) {
-            pictograph = vuforiaWrapper.getPictograph().toLowerCase();
+        if (pictograph == null){
+            random = (int)(Math.random()*3 + 1);
+            if (random == 1){
+                pictograph = "left";
+            }
+            if (random == 2){
+                pictograph = "right";
+            }
+            if (random == 3){
+                pictograph = "center";
+            }
         }
 
-        telemetry.addData("pictograph",pictograph);
+        driveTrain.turnWithPID(-90, 5, 0.5, this);
+
+        switch (pictograph){
+            case "left":
+                driveTrain.driveToDistance(23, true, 10, this);
+                break;
+            case "center":
+                driveTrain.driveToDistance(16, true, 7, this);
+                break;
+            case "right":
+                driveTrain.driveToDistance(9, true, 5, this);
+        }
+
+        driveTrain.turnWithPID(90, 5, 0.5, this);
+        driveTrain.driveToDistance(5.5, true, 5, this);
+
+        glyph.clampOut();
+
+        driveTrain.driveToDistance(2, false, 5, this);
+        driveTrain.driveToDistance(2.5, true, 5, this);
         telemetry.update();
-        */
 
     }
+}
 

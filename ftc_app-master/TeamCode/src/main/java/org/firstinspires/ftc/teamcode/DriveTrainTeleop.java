@@ -106,11 +106,11 @@ public class DriveTrainTeleop extends LinearOpMode {
                 telemetry.update();
             } */
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.left_bumper){
                 glyph.intake();
             }
 
-            else if (gamepad1.left_bumper){
+            else if (gamepad1.right_bumper){
                 glyph.outtake();
             }
 
