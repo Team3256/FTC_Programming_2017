@@ -65,13 +65,13 @@ public class Glyph{
     }
 
     public void clampIn(){
-        glyphClampL.setPosition(0);
-        glyphClampR.setPosition(1);
+        glyphClampL.setPosition(0.4);
+        glyphClampR.setPosition(0.6);
     }
 
     public void clampOut(){
-        glyphClampL.setPosition(1);
-        glyphClampR.setPosition(0);
+        glyphClampL.setPosition(0.5);
+        glyphClampR.setPosition(0.5);
     }
 
 

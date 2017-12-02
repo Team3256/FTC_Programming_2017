@@ -34,7 +34,7 @@ public class DriveTrain {
 
     private DcMotor leftFront, rightFront, leftBack, rightBack;
 
-    private Servo rampServoL, rampServoR;
+    private Servo rampServo;
 
     private static DriveTrain driveTrain = new DriveTrain();
 
@@ -81,8 +81,7 @@ public class DriveTrain {
 
         //setPower(0);
 
-        rampServoL = hardwareMap.servo.get("rampServoL");
-        rampServoR = hardwareMap.servo.get("rampServoR");
+        rampServo = hardwareMap.servo.get("rampServo");
 
     }
 
@@ -407,13 +406,11 @@ public class DriveTrain {
     }
 
     public void driveRampDown () throws InterruptedException {
-        rampServoL.setPosition(0);
-        rampServoR.setPosition(0);
+        rampServo.setPosition(0);
     }
 
     public void driveRampUp () throws InterruptedException {
-        rampServoL.setPosition(0.75);
-        rampServoR.setPosition(0.75);
+        rampServo.setPosition(0.75);
     }
 
     public boolean isBusy (){

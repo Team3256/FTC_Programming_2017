@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Glyph;
 import org.firstinspires.ftc.teamcode.subsystems.Jewel;
 
+import static android.R.attr.dropDownVerticalOffset;
 import static android.R.attr.y;
 
 /**
@@ -107,6 +108,10 @@ public class DriveTrainTeleop extends LinearOpMode {
 
             if (gamepad1.x){
                 glyph.intakeOut();
+            }
+
+            if (gamepad1.b){
+                driveTrain.driveRampUp();
             }
 
             left = -gamepad1.left_stick_y;
