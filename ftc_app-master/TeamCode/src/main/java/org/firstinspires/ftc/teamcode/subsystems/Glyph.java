@@ -64,25 +64,25 @@ public class Glyph{
     }
 
     public void clampIn(){
-        glyphClampL.setPosition(0.4);
-        glyphClampR.setPosition(0.6);
+        glyphClampL.setPosition(0);
+        glyphClampR.setPosition(1);
     }
 
     public void clampOut(){
-        glyphClampL.setPosition(0.5);
-        glyphClampR.setPosition(0.5);
+        glyphClampL.setPosition(0.47);
+        glyphClampR.setPosition(0.53);
     }
 
 
     public void intake (){
-        glyphIntakeL.setPower(-0.3);
-        glyphIntakeR.setPower(0.3);
+        glyphIntakeL.setPower(-0.5);
+        glyphIntakeR.setPower(0.5);
         glyphPivotL.setPosition(0.9);
         glyphPivotR.setPosition(0.25);
     }
     public void outtake (){
-        glyphIntakeL.setPower(0.37);
-        glyphIntakeR.setPower(-0.3);
+        glyphIntakeL.setPower(0.5);
+        glyphIntakeR.setPower(-0.5);
         glyphPivotL.setPosition(0.9);
         glyphPivotR.setPosition(0.25);
     }
@@ -118,14 +118,14 @@ public class Glyph{
     public void goUp() {
         glyphElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        glyphElevator.setPower(-.3);
+        glyphElevator.setPower(-.7);
 
     }
 
     public void goDown() {
         glyphElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        glyphElevator.setPower(.3);
+        glyphElevator.setPower(.7);
 
     }
 
