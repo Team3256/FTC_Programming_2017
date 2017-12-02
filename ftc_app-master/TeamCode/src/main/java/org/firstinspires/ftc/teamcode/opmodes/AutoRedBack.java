@@ -32,18 +32,29 @@ public class AutoRedBack extends LinearOpMode {
 
         waitForStart();
 
+        //jewel.jewelUp();
+
         if(jewel.isBlue()) {
             telemetry.addData("iS","bLue");
+            //driveTrain.driveToDistance(2, false, 1000, this);
         } else {
             telemetry.addData("iS","rEd");
+            //driveTrain.driveToDistance(2, true, 1000, this);
         }
 
+        //jewel.jewelDown();
 
-
-        pictograph = vuforiaWrapper.getPictograph().toLowerCase();
+        while (pictograph == null) {
+            pictograph = vuforiaWrapper.getPictograph().toLowerCase();
+        }
 
         telemetry.addData("pictograph",pictograph);
         telemetry.update();
 
+        /*
+
+
+
+         */
     }
 }

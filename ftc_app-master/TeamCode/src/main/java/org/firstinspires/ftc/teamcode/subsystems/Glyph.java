@@ -111,7 +111,7 @@ public class Glyph{
     public void elevatorFullUp(LinearOpMode opMode) {
         telemetryPass.addData("fullup","running");
         telemetryPass.update();
-        if(glyphElevator.getCurrentPosition() < 1496) {
+        if(glyphElevator.getCurrentPosition() > -1496) {
             glyphElevator.setPower(.7);
         }
 
@@ -123,7 +123,7 @@ public class Glyph{
         telemetryPass.addData("halfup","running");
         telemetryPass.update();
         double direction = -.5;
-        if(glyphElevator.getCurrentPosition() < 1546/2) {
+        if(glyphElevator.getCurrentPosition() > -1546/2) {
             direction = .7;
         }
 
@@ -131,7 +131,7 @@ public class Glyph{
             glyph.stopElevator(opMode);
         }
 
-        if(Math.abs(glyphElevator.getCurrentPosition()-1546/2) > 0) {
+        if(Math.abs(glyphElevator.getCurrentPosition()+1546/2) > 0) {
             glyphElevator.setPower(direction);
         }
 
@@ -143,7 +143,7 @@ public class Glyph{
 
         telemetryPass.addData("down","running");
         telemetryPass.update();
-        if(glyphElevator.getCurrentPosition() > 50) {
+        if(glyphElevator.getCurrentPosition() <  -50) {
             glyphElevator.setPower(-.5);
         }
         else {
