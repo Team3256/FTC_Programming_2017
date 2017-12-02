@@ -121,10 +121,9 @@ public class DriveTrainTeleop extends LinearOpMode {
             else {
                 glyph.zeroPower();
             }
-
-           /* if (gamepad1.b){
+            if (gamepad1.b){
                 driveTrain.driveRampUp();
-            } */
+            }
 
             left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_x;
