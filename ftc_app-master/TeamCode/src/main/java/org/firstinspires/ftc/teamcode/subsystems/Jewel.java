@@ -34,13 +34,13 @@ public class Jewel {
         jewelArm.setPosition(jewelArm.getPosition());
     }
 
-    public void setArmDown(){
+    public void setArmUp(){
         position = 0; //0.5
         jewelArm.setPosition(position);
     }
 
-    public void setArmUp(){
-        position = 1;
+    public void setArmDown(){
+        position = 0.82;
         jewelArm.setPosition(position);
     }
 

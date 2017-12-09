@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Glyph;
 import org.firstinspires.ftc.teamcode.subsystems.IMUWrapper;
 
 /**
@@ -16,6 +17,7 @@ public class AutoTest extends LinearOpMode{
 
     public static Telemetry telemetryPass;
     private DriveTrain driveTrain = DriveTrain.getInstance();
+    private Glyph glyph = Glyph.getInstance();
 
 
     @Override
@@ -23,6 +25,7 @@ public class AutoTest extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         AutoTest.telemetryPass = telemetry;
         driveTrain.init(hardwareMap);
+        glyph.init(hardwareMap);
 
 
 
@@ -30,7 +33,12 @@ public class AutoTest extends LinearOpMode{
 
         //driveTrain.turnEncoder(45, .5, true);
 
-        //driveTrain.driveToDistance(24, true, 30, this);
+        glyph.clampIn();
+
+        driveTrain.driveToDistance(20, true, 30, this);
+        glyph.clampOut();
+        driveTrain.driveToDistance(2, false, 30, this);
+        driveTrain.driveToDistance(1.5 , true, 30, this);
         //driveTrain.driveRamp();
         //driveTrain.driveToDistance(24, true, 30, this);
 

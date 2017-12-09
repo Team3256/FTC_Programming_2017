@@ -10,17 +10,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.internal.android.dx.io.instructions.ThreeRegisterDecodedInstruction;
-import org.firstinspires.ftc.robotcore.internal.android.dx.rop.cst.Constant;
 import org.firstinspires.ftc.teamcode.base.Constants;
 import org.firstinspires.ftc.teamcode.base.PIDController;
 
-import static android.R.attr.breakStrategy;
-import static android.R.attr.left;
-import static android.R.attr.right;
-import static com.sun.tools.javac.jvm.ByteCodes.bool_and;
-import static com.sun.tools.javac.jvm.ByteCodes.error;
-import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
 
 
 /**
@@ -51,9 +43,6 @@ public class DriveTrain {
         this.hardwareMap = hardwareMap;
 
         gyro = new IMUWrapper("imu", hardwareMap);
-
-        telemetryPass.addData("hardwareMap",hardwareMap==null);
-        telemetryPass.update();
 
         gyro.calibrate();
 
@@ -134,8 +123,8 @@ public class DriveTrain {
         double left = Math.pow((throttle + turn), 1);
         double right = Math.pow((throttle - turn), 1);
 
-        right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1)*.93;
+        right = Range.clip(right, -1, 1)*.93;
+        left = Range.clip(left, -1, 1);
 
         runLeft(left);
         runRight(right);
@@ -212,7 +201,7 @@ public class DriveTrain {
         int ticks = (int)inchesToTicks(inches);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PIDController distancePIDController = new PIDController(0.001, 0.0 , 0); //distance PID
-        PIDController gyroPIDController = new PIDController(0.005, 0, 0);
+        PIDController gyroPIDController = new PIDController(0.006, 0, 0);
         gyro.reset();
         resetEncoders();
         double startTime = System.currentTimeMillis();
@@ -233,20 +222,20 @@ public class DriveTrain {
             runRight(distancePID - gyroPID);
             runLeft(distancePID + gyroPID);
 
-            telemetryPass.addData("Error",error);
+            /*telemetryPass.addData("Error",error);
             telemetryPass.addData("Distance PID: ", distancePID);
             telemetryPass.addData("Gyro", gyro.getHeading());
             telemetryPass.addData("Left encoder ticks",getLeftEncoder());
             telemetryPass.addData("Right encoder ticks",getRightEncoder());
             telemetryPass.addData("Inches",ticksToInches(getAverageEncoderValue()));
-            telemetryPass.update();
+            telemetryPass.update(); */
         }
 
         runRight(0);
         runLeft(0);
 
 
-        telemetryPass.addData("Right Front", rightFront.getCurrentPosition());
+        /*telemetryPass.addData("Right Front", rightFront.getCurrentPosition());
         telemetryPass.addData("Right Back", rightBack.getCurrentPosition());
         telemetryPass.addData("Left Front", leftFront.getCurrentPosition());
         telemetryPass.addData("Left Back", leftBack.getCurrentPosition());
@@ -257,7 +246,7 @@ public class DriveTrain {
         telemetryPass.addData("Left encoder ticks",getLeftEncoder());
         telemetryPass.addData("Right encoder ticks",getRightEncoder());
         telemetryPass.addData("Inches",degreesToInches(ticksToDegrees(getAverageEncoderValue())));
-        telemetryPass.update();
+        telemetryPass.update(); */
 
         Thread.sleep(20);
 
@@ -291,10 +280,10 @@ public class DriveTrain {
             runRight(rightPower);
             runLeft(leftPower);
 
-            telemetryPass.addData("Target Ticks", targetTicks);
+            /*telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
-            telemetryPass.update();
+            telemetryPass.update(); */
         }
         runRight(0);
         runLeft(0);
@@ -316,7 +305,7 @@ public class DriveTrain {
             }
             runRight(turnPID);
             runLeft(-turnPID);
-            telemetryPass.addData("Target Ticks", targetTicks);
+            /*telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
             telemetryPass.addData("Gyro", gyro.getHeading());
@@ -324,16 +313,16 @@ public class DriveTrain {
             telemetryPass.addData("Target", degrees);
             telemetryPass.addData("Error", gyro.getHeading()+degrees);
             telemetryPass.addData("TurnRight", turnRight);
-            telemetryPass.update();
+            telemetryPass.update(); */
         }
         runRight(0);
         runLeft(0);
 
-        telemetryPass.addData("Target Ticks", targetTicks);
+        /*telemetryPass.addData("Target Ticks", targetTicks);
         telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
         telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
         telemetryPass.addData("Gyro", gyro.getHeading());
-        telemetryPass.update();
+        telemetryPass.update(); */
     }
 
     public void turnWithoutPID(int degrees, double timeout, double power, LinearOpMode opMode) throws InterruptedException {
@@ -362,11 +351,11 @@ public class DriveTrain {
             runRight(rightPower);
             runLeft(leftPower);
 
-            telemetryPass.addData("Target Ticks", targetTicks);
+            /*telemetryPass.addData("Target Ticks", targetTicks);
             telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
             telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
             telemetryPass.addData("Gyro", gyro.getHeading());
-            telemetryPass.update();
+            telemetryPass.update(); */
         }
         runRight(0);
         runLeft(0);
@@ -389,63 +378,35 @@ public class DriveTrain {
                 runRight(-0.000001);
                 Thread.sleep(100);
             }
-            telemetryPass.addData("Gyro", gyro.getHeading());
-            telemetryPass.update();
+            //telemetryPass.addData("Gyro", gyro.getHeading());
+            //telemetryPass.update();
 
         }
 
         runRight(0);
         runLeft(0);
 
-        telemetryPass.addData("Target Ticks", targetTicks);
+        /*telemetryPass.addData("Target Ticks", targetTicks);
         telemetryPass.addData("Left Encoder Ticks", getLeftEncoder());
         telemetryPass.addData("Right Encoder Ticks", getRightEncoder());
-        telemetryPass.addData("Gyro", gyro.getHeading());
+        telemetryPass.addData("Gyro", gyro.getHeading()); */
 
-        telemetryPass.update();
+        //telemetryPass.update();
     }
 
     public void driveRampDown () throws InterruptedException {
-        rampServo.setPosition(0);
+        rampServo.setPosition(1);
     }
 
     public void driveRampUp () throws InterruptedException {
-        rampServo.setPosition(0.75);
+        rampServo.setPosition(0.1);
+    }
+
+    public void driveRampMid (){
+        rampServo.setPosition(0.5);
     }
 
     public boolean isBusy (){
         return rightFront.isBusy() && rightBack.isBusy() && leftFront.isBusy() && leftBack.isBusy();
     }
-
-    public void turnEncoder(double degrees, double power, boolean right) {
-        resetEncoders();
-        if (right) {
-            leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftBack.setTargetPosition((int)(degreesToTicks(degrees)/2));
-            leftFront.setTargetPosition((int)(degreesToTicks(degrees)/2));
-            rightBack.setDirection(DcMotor.Direction.FORWARD);
-            rightFront.setDirection(DcMotor.Direction.FORWARD);
-            setPower(power);
-            while (isBusy()) {
-                telemetryPass.addData("left degrees", ticksToDegrees(getLeftEncoder()));
-                telemetryPass.update();
-            }
-            setPower(0);
-        } else {
-            rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightBack.setTargetPosition((int) (degreesToTicks(degrees) / 2));
-            rightFront.setTargetPosition((int) (degreesToTicks(degrees) / 2));
-            leftBack.setDirection(DcMotor.Direction.REVERSE);
-            leftFront.setDirection(DcMotor.Direction.REVERSE);
-            setPower(power);
-            while (isBusy()) {
-                telemetryPass.addData("right degrees", ticksToDegrees(getRightEncoder()));
-                telemetryPass.update();
-            }
-            setPower(0);
-        }
-    }
-
 }

@@ -38,7 +38,6 @@ public class AutoBlueBack extends LinearOpMode {
         jewel.setArmDown();
 
         if (jewel.isBlue()) {
-            telemetry.addData("is", "blue");
             driveTrain.driveToDistance(5.5, true, 5, this);
             while (pictograph == null && counter <= 100) {
                 pictograph = vuforiaWrapper.getPictograph().toLowerCase();
@@ -48,7 +47,6 @@ public class AutoBlueBack extends LinearOpMode {
             jewel.setArmUp();
             driveTrain.driveToDistance(5.5, false, 5, this);
         } else {
-            telemetry.addData("is", "red");
             driveTrain.driveToDistance(3.5, false, 5, this);
             jewel.setArmUp();
             driveTrain.driveToDistance(9, true, 5, this);
@@ -96,7 +94,6 @@ public class AutoBlueBack extends LinearOpMode {
 
         driveTrain.driveToDistance(2, false, 5, this);
         driveTrain.driveToDistance(2.5, true, 5, this);
-        telemetry.update();
 
 
     }

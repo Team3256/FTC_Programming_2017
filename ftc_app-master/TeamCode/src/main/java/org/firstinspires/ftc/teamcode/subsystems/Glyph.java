@@ -6,17 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import static org.firstinspires.ftc.teamcode.DriveTrainTeleop.telemetryPass;
-
 /**
  * Created by Team 3256 on 11/28/2017.
  */
 
 public class Glyph{
 
-    DcMotor glyphElevator, glyphIntakeL, glyphIntakeR; //need to add glyphIntake
-    Servo glyphClampL, glyphClampR, glyphPivotL, glyphPivotR;
+    DcMotor glyphElevator; //need to add glyphIntake
+    Servo glyphClampL, glyphClampR;
     private HardwareMap hardwareMap;
     boolean in = true;
 
@@ -38,18 +35,13 @@ public class Glyph{
         glyphElevator = hardwareMap.dcMotor.get("glyphElevator");
         glyphElevator.setDirection(DcMotorSimple.Direction.FORWARD);
         glyphElevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        glyphIntakeL = hardwareMap.dcMotor.get("glyphIntakeL");
-        glyphIntakeR = hardwareMap.dcMotor.get("glyphIntakeR");
 
         glyphClampL = hardwareMap.servo.get("glyphClampL");
         glyphClampR = hardwareMap.servo.get("glyphClampR");
-        glyphPivotL = hardwareMap.servo.get("glyphPivotL");
-        glyphPivotR = hardwareMap.servo.get("glyphPivotR");
 
         glyphClampL.setPosition(glyphClampL.getPosition());
         glyphClampR.setPosition(glyphClampR.getPosition());
-        glyphPivotL.setPosition(glyphClampL.getPosition());
-        glyphPivotR.setPosition(glyphClampR.getPosition());
+
     }
 
     public void clampToggle(){
@@ -74,7 +66,7 @@ public class Glyph{
     }
 
 
-    public void intake (){
+    /*public void intake (){
         glyphIntakeL.setPower(-0.5);
         glyphIntakeR.setPower(0.5);
         glyphPivotL.setPosition(0.9);
@@ -98,7 +90,7 @@ public class Glyph{
         glyphPivotL.setPosition(0);
         glyphIntakeR.setPower(0);
         glyphIntakeL.setPower(0);
-    }
+    } */
 
     public void resetEncoders() {
 
